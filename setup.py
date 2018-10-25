@@ -3,6 +3,7 @@ from os import path
 import random
 import pygame as pg
 from settings import YELLOW, DISPLAY, PLAYER
+vec = pg.math.Vector2
 
 
 class Player(pg.sprite.Sprite):
@@ -17,20 +18,32 @@ class Player(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.dx = 0
+        self.pos = vec(x, y)
+        self.vel = vec(0, 0)
+
+        self.rect.midbottom = self.pos
 
     def events(self):
-        self.dx = 0
+        self.vel = vec(0, 0)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.dx = -5
+            self.vel.x = -PLAYER['velocity']
         if keys[pg.K_RIGHT]:
-            self.dx = 5
+            self.vel.x = PLAYER['velocity']
+        if keys[pg.K_UP]:
+            self.vel.y = -PLAYER['velocity']
+        if keys[pg.K_DOWN]:
+            self.vel.y = PLAYER['velocity']
+        if self.vel.length() > PLAYER['velocity']:
+            self.vel.scale_to_length(PLAYER['velocity'])
 
     def update(self):
         self.events()
-        self.rect.x += self.dx
+        self.pos += self.vel * self.game.dt
         if self.rect.left > DISPLAY['width']:
             self.rect.right = 0
+
+        self.rect.midbottom = self.pos
 
 
 class Game(object):
@@ -62,7 +75,7 @@ class Game(object):
         # game loop - set  self.playing = False to end the game
         self.running = True
         while self.running:
-            self.clock.tick(DISPLAY['fps'])
+            self.dt = self.clock.tick(DISPLAY['fps']) / 1000.
             self.events()
             self.update()
             self.draw()
@@ -93,6 +106,8 @@ class Game(object):
         self.all_sprites.update()
 
     def draw(self):
+        pg.display.set_caption('%s - fps: %.5s' %
+                               (DISPLAY['title'], self.clock.get_fps()))
         self.screen.fill(DISPLAY['bgcolor'])
         self.all_sprites.draw(self.screen)
 

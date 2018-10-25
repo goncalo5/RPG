@@ -15,12 +15,13 @@ DISPLAY = {
     'width': 360,
     'height': 480,
     'bgcolor': DARKBLUE,
-    'fps': 30
+    'fps': 60
 }
 
 # Player
 PLAYER = {
-    'layer': 2
+    'layer': 2,
+    'velocity': 150
 }
 
 ability_score = {
