@@ -2,49 +2,10 @@
 from os import path
 import random
 import pygame as pg
-from settings import YELLOW, DISPLAY, PLAYER
+from settings import DISPLAY
 from places import Water, Ground, Grass, Rock
+from caracthers import Player
 vec = pg.math.Vector2
-
-
-class Player(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self._layer = PLAYER['layer']
-        self.groups = game.all_sprites
-        super(Player, self).__init__(self.groups)
-        self.game = game
-        self.image = pg.Surface((DISPLAY['tilesize'], DISPLAY['tilesize']))
-        self.image.fill(YELLOW)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.dx = 0
-        self.pos = vec(x, y)
-        self.vel = vec(0, 0)
-
-        self.rect.midbottom = self.pos
-
-    def events(self):
-        self.vel = vec(0, 0)
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT]:
-            self.vel.x = -PLAYER['velocity']
-        if keys[pg.K_RIGHT]:
-            self.vel.x = PLAYER['velocity']
-        if keys[pg.K_UP]:
-            self.vel.y = -PLAYER['velocity']
-        if keys[pg.K_DOWN]:
-            self.vel.y = PLAYER['velocity']
-        if self.vel.length() > PLAYER['velocity']:
-            self.vel.scale_to_length(PLAYER['velocity'])
-
-    def update(self):
-        self.events()
-        self.pos += self.vel * self.game.dt
-        if self.rect.left > DISPLAY['width']:
-            self.rect.right = 0
-
-        self.rect.midbottom = self.pos
 
 
 class Game(object):
