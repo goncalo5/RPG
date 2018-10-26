@@ -46,7 +46,12 @@ class Game(object):
 
     def new(self):
         # start a new game
+        # sprites:
         self.all_sprites = pg.sprite.LayeredUpdates()
+        self.water = pg.sprite.Group()
+        self.ground = pg.sprite.Group()
+        self.grass = pg.sprite.Group()
+        self.rock = pg.sprite.Group()
 
         self.tilesize = DISPLAY['tilesize']
 

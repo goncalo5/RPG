@@ -8,8 +8,11 @@ from settings import BLUE, GREEN, BROWN, GREY
 
 
 class Place(pg.sprite.Sprite):
-    def __init__(self, game, x, y, width, height):
-        self.group = game.all_sprites
+    def __init__(self, game, x, y, width, height, groups=None):
+        if not groups:
+            self.group = game.all_sprites
+        else:
+            self.group = groups
         super(Place, self).__init__(self.group)
         self.game = game
         self.monsters = {}
@@ -32,7 +35,8 @@ class Place(pg.sprite.Sprite):
 
 class Water(Place):
     def __init__(self, game, x, y, width, height):
-        super(Water, self).__init__(game, x, y, width, height)
+        groups = game.all_sprites, game.water
+        super(Water, self).__init__(game, x, y, width, height, groups)
         self.image.fill(BLUE)
 
 

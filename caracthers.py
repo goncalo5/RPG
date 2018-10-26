@@ -77,7 +77,14 @@ class Player(Caracther):
         if self.rect.left > DISPLAY['width']:
             self.rect.right = 0
 
+        self.handle_collisions()
+
         self.rect.midbottom = self.pos
+
+    def handle_collisions(self):
+        hit_water = pg.sprite.spritecollide(self, self.game.water, False)
+        if hit_water:
+            print(self.game.water)
 
 
 class Monster(Caracther):

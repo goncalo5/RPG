@@ -26,6 +26,56 @@ PLAYER = {
     'velocity': 150
 }
 
+
+hero = {
+    "options": ["select item", "explore", "move", "quit"],
+    "location": "forest",
+    "energy": 100,
+    "hp": 10,
+    "armor": 10,
+    "init": 0,
+    "xp": 0,
+    "level": 1,
+
+    "strength": 19,
+    "dexterity": 10,
+    "constitution": 12,
+    "intelligence": 8,
+    "wisdom": 10,
+    "charisma": 10,
+
+    "speed": 30,
+    "prof": 2,
+
+    "actions": {
+        "main_hand": {
+            "to_hit": 0,
+            "damage": 1,
+            "damage_type": "bludgeoning"
+        },
+    },
+    "stuff": {
+        "gold": 0,
+        "equipped": {
+            "main hand": None,
+            "left hand": None,
+        },
+        "carried": {
+        },
+    },
+    "aspect": {
+        "race": "half-orc",
+        "gender": "male",
+        "height": 1.85,
+        "weight": 100,
+        "age": 26,
+        "eye": "red",
+        "hair": "black",
+        "skin": "beige",
+    }
+}
+
+
 ability_score = {
     "strength": {
         "racial_increases": {
@@ -1907,55 +1957,6 @@ ITEMS = {
         "cost": "1 cp",
         "weight": 1,
     },
-}
-
-
-hero = {
-    "options": ["select item", "explore", "move", "quit"],
-    "location": "forest",
-    "energy": 100,
-    "hp": 10,
-    "armor": 10,
-    "init": 0,
-    "xp": 0,
-    "level": 1,
-
-    "strength": 19,
-    "dexterity": 10,
-    "constitution": 12,
-    "intelligence": 8,
-    "wisdom": 10,
-    "charisma": 10,
-
-    "speed": 30,
-    "prof": 2,
-
-    "actions": {
-        "main_hand": {
-            "to_hit": 0,
-            "damage": 1,
-            "damage_type": "bludgeoning"
-        },
-    },
-    "stuff": {
-        "gold": 0,
-        "equipped": {
-            "main hand": None,
-            "left hand": None,
-        },
-        "carried": {
-        },
-    },
-    "aspect": {
-        "race": "half-orc",
-        "gender": "male",
-        "height": 1.85,
-        "weight": 100,
-        "age": 26,
-        "eye": "red",
-        "hair": "black",
-        "skin": "beige",
-    }
 }
 
 #
