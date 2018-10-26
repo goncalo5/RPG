@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from os import path
 import random
 import pygame as pg
@@ -99,19 +99,16 @@ class Game(object):
                 newline = []
                 for word in list(line.strip().split(',')):
                     newline.append(word.strip())
-                print newline
                 new_map.append(newline)
             self.map_list = new_map
             self.width = len(self.map_list[0]) * self.tilesize
             self.height = (len(self.map_list)) * self.tilesize
-            print self.width, self.height
         self.screen = pg.display.set_mode((self.width, self.height))
 
         for i, line in enumerate(self.map_list):
             for j, tile in enumerate(line):
                 x = j * self.tilesize
                 y = i * self.tilesize
-                print i, j, tile
                 if tile == 'water':
                     Water(self, x, y, self.tilesize, self.tilesize)
                 if tile == 'ground':

@@ -4,7 +4,7 @@ import pygame as pg
 
 # my modules
 from settings import BLUE, GREEN, BROWN, GREY
-import caracthers
+# import caracthers
 
 
 class Place(pg.sprite.Sprite):
@@ -26,8 +26,8 @@ class Place(pg.sprite.Sprite):
             self.monsters[monster] -= 1
             # to_exec = 'self.%s = caracthers.Monster(name="%s", caracther_settings=settings.%s)' %
             #     (monster.name, monster.name, monster.name)
-            print to_exec
-            exec to_exec
+            # print to_exec
+            # exec to_exec
 
 
 class Water(Place):
@@ -64,7 +64,7 @@ class Forest(Place):
         for monster in settings.forest["monsters"]:
             to_exec = 'self.%s = caracthers.Monster()' %\
                 (monster)
-            exec to_exec
+            # exec to_exec
         for monster, n_of_monsters in settings.forest["monsters"].items():
             self.monsters[getattr(self, monster)] = n_of_monsters
 
