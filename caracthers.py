@@ -6,7 +6,7 @@ import random
 import pygame as pg
 
 # my modules
-from settings import YELLOW, DISPLAY, PLAYER, hero
+from settings import YELLOW, DISPLAY, PLAYER, WATER, GROUND, GRASS, ROCK
 # from battle import Battle
 from common import roll_the_dices
 # from common import derive_ability
@@ -19,7 +19,7 @@ class Caracther(pg.sprite.Sprite):
         self.group = game.all_sprites
         super(Caracther, self).__init__(self.group)
         self.name = None
-        for hero_setting in hero.items():
+        for hero_setting in PLAYER.items():
             setattr(self, hero_setting[0], hero_setting[1])
         self.alive = True
         self.hp = roll_the_dices(self.hp)
@@ -45,6 +45,7 @@ class Caracther(pg.sprite.Sprite):
         self.dx = 0
         self.pos = vec(x, y)
         self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
 
         self.rect.midbottom = self.pos
 
@@ -55,36 +56,55 @@ class Player(Caracther):
         self.groups = game.all_sprites
         super(Player, self).__init__(game, x, y)
 
+        self.weight = 100
+        self.viscosity = 1
+
         self.image.fill(YELLOW)
 
     def events(self):
         self.vel = vec(0, 0)
+        # self.viscosity = 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.vel.x = -PLAYER['velocity']
+            self.vel.x = -self.base_speed * self.viscosity
         if keys[pg.K_RIGHT]:
-            self.vel.x = PLAYER['velocity']
+            self.vel.x = self.base_speed * self.viscosity
         if keys[pg.K_UP]:
-            self.vel.y = -PLAYER['velocity']
+            self.vel.y = -self.base_speed * self.viscosity
         if keys[pg.K_DOWN]:
-            self.vel.y = PLAYER['velocity']
-        if self.vel.length() > PLAYER['velocity']:
-            self.vel.scale_to_length(PLAYER['velocity'])
+            self.vel.y = self.base_speed * self.viscosity
+        if self.vel.length() > self.base_speed:
+            self.vel.scale_to_length(self.base_speed)
 
     def update(self):
+        self.step_on_the_floor()
         self.events()
-        self.pos += self.vel * self.game.dt
+
+        self.vel += self.acc * self.game.dt
+        if self.vel.length() < 1:
+            self.vel = vec(0, 0)
+        self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt**2
         if self.rect.left > DISPLAY['width']:
             self.rect.right = 0
 
-        self.handle_collisions()
+        print(self.vel, self.acc, self.viscosity)
 
         self.rect.midbottom = self.pos
 
-    def handle_collisions(self):
-        hit_water = pg.sprite.spritecollide(self, self.game.water, False)
-        if hit_water:
-            print(self.game.water)
+    def step_on_the_floor(self):
+        self.viscosity = 1
+        if pg.sprite.spritecollide(self, self.game.water, False):
+            print('water')
+            self.viscosity = min(self.viscosity, WATER['viscosity'])
+        if pg.sprite.spritecollide(self, self.game.ground, False):
+            print('ground')
+            self.viscosity = min(self.viscosity, GROUND['viscosity'])
+        if pg.sprite.spritecollide(self, self.game.grass, False):
+            print('grass')
+            self.viscosity = min(self.viscosity, GRASS['viscosity'])
+        if pg.sprite.spritecollide(self, self.game.rock, False):
+            print('rock')
+            self.viscosity = min(self.viscosity, ROCK['viscosity'])
 
 
 class Monster(Caracther):

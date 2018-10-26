@@ -42,19 +42,22 @@ class Water(Place):
 
 class Ground(Place):
     def __init__(self, game, x, y, width, height):
-        super(Ground, self).__init__(game, x, y, width, height)
+        groups = game.all_sprites, game.ground
+        super(Ground, self).__init__(game, x, y, width, height, groups)
         self.image.fill(BROWN)
 
 
 class Grass(Place):
     def __init__(self, game, x, y, width, height):
-        super(Grass, self).__init__(game, x, y, width, height)
+        groups = game.all_sprites, game.grass
+        super(Grass, self).__init__(game, x, y, width, height, groups)
         self.image.fill(GREEN)
 
 
 class Rock(Place):
     def __init__(self, game, x, y, width, height):
-        super(Rock, self).__init__(game, x, y, width, height)
+        groups = game.all_sprites, game.rock
+        super(Rock, self).__init__(game, x, y, width, height, groups)
         self.image.fill(GREY)
 
 

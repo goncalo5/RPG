@@ -20,14 +20,71 @@ DISPLAY = {
     'fps': 60
 }
 
+
+# Places
+
+WATER = {
+    'viscosity': .4
+}
+
+GROUND = {
+    'viscosity': .8
+}
+
+GRASS = {
+    'viscosity': .8
+}
+
+ROCK = {
+    'viscosity': .8
+}
+
+forest = {
+    "monsters": {
+        "bat": 10,
+        # "black_bear": 1,
+        # "boar": 3,
+    },
+    "resources": {
+        "wood": 100,
+        "fruit": 10,
+    },
+    "options": {
+        "Pick wood": {"energy": -10, "wood": 1},
+        "Plant a tree": {"energy": -20, "tree": -1},
+        "Pick apples": {"energy": -5, "apples": 1},
+    },
+    "probabilities": {"monsters": 0.9, "tree": 0.0, "apples": 0.0},
+}
+plains = {
+
+}
+montain = {
+    "monsters": {
+        "bear": 3,
+    },
+}
+desert = {
+    "monsters": {
+        "snake": 10,
+    },
+}
+village = {
+    "options": ["house", "market", "smith"],
+}
+mine = {
+
+}
+
+PLACES = {"forest": forest, "plains": plains,
+          "montain": montain, "desert": desert, "village": village}
+
+
 # Player
 PLAYER = {
     'layer': 2,
-    'velocity': 150
-}
+    'base_speed': 150,
 
-
-hero = {
     "options": ["select item", "explore", "move", "quit"],
     "location": "forest",
     "energy": 100,
@@ -2505,49 +2562,6 @@ mastiff = {
 # MONSTERS = {"wolf": wolf, "bear": bear, "snake": snake}
 
 ORDER_OF_CARACTERISTICS_TO_PRINT = ["hp", "armor", "init", "speed"]
-
-
-# Places
-
-forest = {
-    "monsters": {
-        "bat": 10,
-        # "black_bear": 1,
-        # "boar": 3,
-    },
-    "resources": {
-        "wood": 100,
-        "fruit": 10,
-    },
-    "options": {
-        "Pick wood": {"energy": -10, "wood": 1},
-        "Plant a tree": {"energy": -20, "tree": -1},
-        "Pick apples": {"energy": -5, "apples": 1},
-    },
-    "probabilities": {"monsters": 0.9, "tree": 0.0, "apples": 0.0},
-}
-plains = {
-
-}
-montain = {
-    "monsters": {
-        "bear": 3,
-    },
-}
-desert = {
-    "monsters": {
-        "snake": 10,
-    },
-}
-village = {
-    "options": ["house", "market", "smith"],
-}
-mine = {
-
-}
-
-PLACES = {"forest": forest, "plains": plains,
-          "montain": montain, "desert": desert, "village": village}
 
 
 DAMAGE_TYPES = ["acid", "bludgeoning", "cold", "fire", "force", "lightning",
