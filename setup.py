@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from os import path
-import random
+# import random
 import pygame as pg
 from settings import DISPLAY
 from places import Water, Ground, Grass, Rock, House, Floor, Door
@@ -93,6 +93,7 @@ class Game(object):
 
     def new(self):
         # start a new game
+
         # sprites:
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.water = pg.sprite.Group()
@@ -111,10 +112,7 @@ class Game(object):
         self.load_the_map()
 
         # Hero:
-        self.player_img = self.load_a_image('walk_70000.png',
-                                            ['Imgs', 'Hero', 'Walk'])
-        self.player_img = pg.transform.scale(self.player_img, (50, 50))
-        self.player = Player(self, 100, 100)
+        Player.load(self)
 
     def run(self):
         # game loop - set  self.playing = False to end the game

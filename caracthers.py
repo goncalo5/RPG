@@ -6,9 +6,9 @@ import random
 import pygame as pg
 
 # my modules
-from settings import YELLOW, DISPLAY, PLAYER, WATER, GROUND, GRASS, ROCK
+from settings import DISPLAY, PLAYER, WATER, GROUND, GRASS, ROCK
 # from battle import Battle
-from common import roll_the_dices
+from common import roll_the_dices, Load
 # from common import derive_ability
 
 vec = pg.math.Vector2
@@ -70,6 +70,13 @@ class Caracther(pg.sprite.Sprite):
 
 
 class Player(Caracther):
+
+    @classmethod
+    def load(cls, game):
+        cls.player_img = Load.image(game, 'walk_70000.png', PLAYER['img_dir'])
+        cls.player_img = pg.transform.scale(cls.player_img, (50, 50))
+        game.player = Player(game, 100, 100)
+
     def __init__(self, game, x, y):
         self._layer = PLAYER['layer']
         self.groups = game.all_sprites
@@ -80,7 +87,7 @@ class Player(Caracther):
 
         # self.image.fill(YELLOW)
         # pg.transform.scale(self.image, (self.rect.size))
-        self.image = self.game.player_img
+        self.image = Player.player_img
         self.rect = self.image.get_rect()
 
         self.rect.x = x

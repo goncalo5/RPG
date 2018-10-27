@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import os
+from os import path
 import random
+import pygame as pg
 
 #
 # presentation
@@ -13,6 +15,26 @@ def clear_screen():
 ################################################################
 # logic
 #
+
+
+# loads:
+class Load(object):
+    @classmethod
+    def thing(cls, game, thing_dir_list, thing_file):
+        thing_dir = game.dir
+        for dir in thing_dir_list:
+            thing_dir = path.join(thing_dir, dir)
+        thing_path = path.join(thing_dir, thing_file)
+        return thing_path
+
+    @classmethod
+    def image(cls, game, thing_file, thing_dir_list=['img'],
+              thing_size=None):
+        thing_path = Load.thing(game, thing_dir_list, thing_file)
+        thing_img = pg.image.load(thing_path).convert_alpha()
+        if thing_size:
+            thing_img = pg.transform.scale(thing_img, thing_size)
+        return thing_img
 
 
 def convert_to_camel(string):

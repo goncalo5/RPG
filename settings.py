@@ -88,6 +88,8 @@ PLACES = {"forest": forest, "plains": plains,
 
 # Player
 PLAYER = {
+    'img_dir': ['Imgs', 'Hero', 'Walk'],
+
     'layer': 2,
     'base_speed': 150,
 
