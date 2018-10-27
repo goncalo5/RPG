@@ -134,16 +134,20 @@ class Player(Caracther):
 
     def step_on_the_floor(self):
         self.viscosity = 1
-        if pg.sprite.spritecollide(self, self.game.water, False):
+        if pg.sprite.spritecollide(self, self.game.water, False,
+                                   collide_hit_rect):
             # print('water')
             self.viscosity = min(self.viscosity, WATER['viscosity'])
-        if pg.sprite.spritecollide(self, self.game.ground, False):
+        if pg.sprite.spritecollide(self, self.game.ground, False,
+                                   collide_hit_rect):
             # print('ground')
             self.viscosity = min(self.viscosity, GROUND['viscosity'])
-        if pg.sprite.spritecollide(self, self.game.grass, False):
+        if pg.sprite.spritecollide(self, self.game.grass, False,
+                                   collide_hit_rect):
             # print('grass')
             self.viscosity = min(self.viscosity, GRASS['viscosity'])
-        if pg.sprite.spritecollide(self, self.game.rocks, False):
+        if pg.sprite.spritecollide(self, self.game.rocks, False,
+                                   collide_hit_rect):
             # print('rock')
             self.viscosity = min(self.viscosity, ROCK['viscosity'])
 

@@ -17,6 +17,7 @@ class Game(object):
 
         # variables
         self.cmd_key_down = False
+        self.debug = False
         self.map_group = None
 
         self.load_data()
@@ -135,11 +136,16 @@ class Game(object):
             quit()
 
         if event.type == pg.KEYDOWN:
+            # quit
             if event.key == 310:
                 self.cmd_key_down = True
             if self.cmd_key_down and event.key == pg.K_q:
                 # force quit
                 quit()
+
+            # debug
+            if event.key == pg.K_d:
+                self.debug = not self.debug
 
         if event.type == pg.KEYUP:
             if event.key == 310:
@@ -154,7 +160,8 @@ class Game(object):
                                (DISPLAY['title'], self.clock.get_fps()))
         self.screen.fill(DISPLAY['bgcolor'])
         self.all_sprites.draw(self.screen)
-        pg.draw.rect(self.screen, (100, 100, 100), self.player.hit_rect, 1)
+        if self.debug:
+            pg.draw.rect(self.screen, (100, 100, 100), self.player.hit_rect, 1)
 
         pg.display.flip()
 
