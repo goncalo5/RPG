@@ -3,7 +3,7 @@ import random
 import pygame as pg
 
 # my modules
-from settings import BLUE, GREEN, BROWN, GREY
+from settings import BLUE, GREEN, BROWN, GREY, WHITE, LIGHTBROWN, DARKBROWN
 # import caracthers
 
 vec = pg.math.Vector2
@@ -64,6 +64,27 @@ class Rock(Place):
         self.pos = vec(self.rect.midbottom)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+
+
+class House(Place):
+    def __init__(self, game, x, y, width, height):
+        groups = game.all_sprites, game.houses
+        super(House, self).__init__(game, x, y, width, height, groups)
+        self.image.fill(WHITE)
+
+
+class Floor(Place):
+    def __init__(self, game, x, y, width, height):
+        groups = game.all_sprites, game.floors
+        super(Floor, self).__init__(game, x, y, width, height, groups)
+        self.image.fill(LIGHTBROWN)
+
+
+class Door(Place):
+    def __init__(self, game, x, y, width, height):
+        groups = game.all_sprites, game.doors
+        super(Door, self).__init__(game, x, y, width, height, groups)
+        self.image.fill(DARKBROWN)
 
 
 class Forest(Place):

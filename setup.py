@@ -3,7 +3,7 @@ from os import path
 import random
 import pygame as pg
 from settings import DISPLAY
-from places import Water, Ground, Grass, Rock
+from places import Water, Ground, Grass, Rock, House, Floor, Door
 from caracthers import Player
 vec = pg.math.Vector2
 
@@ -17,6 +17,7 @@ class Game(object):
 
         # variables
         self.cmd_key_down = False
+        self.map_group = None
 
         self.load_data()
         self.new()
@@ -24,7 +25,7 @@ class Game(object):
 
         pg.quit()
 
-    def load_a_thing(self, thing_file, thing_dir_list):
+    def load_a_thing(self, thing_dir_list, thing_file):
         thing_dir = self.dir
         for dir in thing_dir_list:
             thing_dir = path.join(thing_dir, dir)
@@ -39,6 +40,51 @@ class Game(object):
             thing_img = pg.transform.scale(thing_img, thing_size)
         return thing_img
 
+    def load_a_map_list(self, dir, file):
+        forest_map_file = self.load_a_thing(dir, file)
+        with open(forest_map_file) as map:
+            self.map_list = map.readlines()
+            # print self.map_list
+            new_map = []
+            for line in self.map_list:
+                line = line.replace('\n', '')
+                newline = []
+                for word in list(line.strip().split(',')):
+                    newline.append(word.strip())
+                new_map.append(newline)
+            self.map_list = new_map
+        return new_map
+
+    def load_the_map(self):
+        if self.map_group:
+            for sprite in self.map_group:
+                sprite.kill()
+            print(self.map_group)
+        self.map_group = pg.sprite.Group()
+        self.width = len(self.current_map[0]) * self.tilesize
+        self.height = (len(self.current_map)) * self.tilesize
+        self.screen = pg.display.set_mode((self.width,
+                                           self.height))
+
+        for i, line in enumerate(self.current_map):
+            for j, tile in enumerate(line):
+                x = j * self.tilesize
+                y = i * self.tilesize
+                if tile == 'water':
+                    self.map_group.add(Water(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'ground':
+                    self.map_group.add(Ground(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'grass':
+                    self.map_group.add(Grass(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'rock':
+                    self.map_group.add(Rock(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'house':
+                    self.map_group.add(House(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'floor':
+                    self.map_group.add(Floor(self, x, y, self.tilesize, self.tilesize))
+                if tile == 'door':
+                    self.map_group.add(Door(self, x, y, self.tilesize, self.tilesize))
+
     def load_data(self):
         self.dir = path.dirname(__file__)
 
@@ -52,37 +98,16 @@ class Game(object):
         self.ground = pg.sprite.Group()
         self.grass = pg.sprite.Group()
         self.rocks = pg.sprite.Group()
+        self.houses = pg.sprite.Group()
+        self.floors = pg.sprite.Group()
+        self.doors = pg.sprite.Group()
 
         self.tilesize = DISPLAY['tilesize']
 
-        forest_map_file = self.load_a_thing('forest.csv', ['maps'])
-        with open(forest_map_file) as map:
-            self.map_list = map.readlines()
-            # print self.map_list
-            new_map = []
-            for line in self.map_list:
-                line = line.replace('\n', '')
-                newline = []
-                for word in list(line.strip().split(',')):
-                    newline.append(word.strip())
-                new_map.append(newline)
-            self.map_list = new_map
-            self.width = len(self.map_list[0]) * self.tilesize
-            self.height = (len(self.map_list)) * self.tilesize
-        self.screen = pg.display.set_mode((self.width, self.height))
-
-        for i, line in enumerate(self.map_list):
-            for j, tile in enumerate(line):
-                x = j * self.tilesize
-                y = i * self.tilesize
-                if tile == 'water':
-                    Water(self, x, y, self.tilesize, self.tilesize)
-                if tile == 'ground':
-                    Ground(self, x, y, self.tilesize, self.tilesize)
-                if tile == 'grass':
-                    Grass(self, x, y, self.tilesize, self.tilesize)
-                if tile == 'rock':
-                    Rock(self, x, y, self.tilesize, self.tilesize)
+        self.forest = self.load_a_map_list(['maps'], 'forest.csv')
+        self.house1 = self.load_a_map_list(['maps'], 'house1.csv')
+        self.current_map = self.forest
+        self.load_the_map()
 
         self.player = Player(self, 100, 100)
 

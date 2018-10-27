@@ -119,6 +119,8 @@ class Player(Caracther):
         # print(self.vel, self.acc, self.viscosity)
         self.player_collide_with_a_rock()
 
+        self.enter_in_a_house()
+
         self.rect.center = self.pos
 
     def step_on_the_floor(self):
@@ -143,6 +145,16 @@ class Player(Caracther):
         self.hit_rect.centery = self.pos.y
         collide_with_walls(self, self.game.rocks, 'y')
         self.rect.center = self.hit_rect.center
+
+    def enter_in_a_house(self):
+        # print('enter_in_a_house', self.game.doors)
+        hit = pg.sprite.spritecollide(self, self.game.houses, False)
+        if hit:
+            # print('enter')
+
+            self.game.current_map = self.game.house1
+            self.game.load_the_map()
+            self.pos = vec(50, 50)
 
 
 class Monster(Caracther):

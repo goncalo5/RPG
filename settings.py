@@ -9,6 +9,8 @@ BLUE = (0, 0, 255)
 DARKBLUE = (0, 0, 100)
 YELLOW = (255, 255, 0)
 BROWN = (139, 69, 19)
+LIGHTBROWN = (214, 120, 34)
+DARKBROWN = (87, 49, 14)
 
 # Screen
 DISPLAY = {
@@ -37,6 +39,10 @@ GRASS = {
 
 ROCK = {
     'viscosity': .8
+}
+
+FLOOR = {
+    'viscosity': 1
 }
 
 forest = {
