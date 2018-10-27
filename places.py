@@ -6,6 +6,8 @@ import pygame as pg
 from settings import BLUE, GREEN, BROWN, GREY
 # import caracthers
 
+vec = pg.math.Vector2
+
 
 class Place(pg.sprite.Sprite):
     def __init__(self, game, x, y, width, height, groups=None):
@@ -56,9 +58,12 @@ class Grass(Place):
 
 class Rock(Place):
     def __init__(self, game, x, y, width, height):
-        groups = game.all_sprites, game.rock
+        groups = game.all_sprites, game.rocks
         super(Rock, self).__init__(game, x, y, width, height, groups)
         self.image.fill(GREY)
+        self.pos = vec(self.rect.midbottom)
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
 
 
 class Forest(Place):
