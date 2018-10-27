@@ -64,17 +64,9 @@ class Caracther(pg.sprite.Sprite):
         self.actions = actions
 
         self.game = game
-        self.image = pg.Surface((DISPLAY['tilesize'], DISPLAY['tilesize']))
-
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.dx = 0
-        self.pos = vec(x, y)
-        self.vel = vec(0, 0)
-        self.acc = vec(0, 0)
-
-        self.rect.center = self.pos
+        # self.image = pg.Surface((DISPLAY['tilesize'], DISPLAY['tilesize']))
+        #
+        # self.rect = self.image.get_rect()
 
 
 class Player(Caracther):
@@ -85,10 +77,25 @@ class Player(Caracther):
 
         self.weight = 100
         self.viscosity = 1
-        self.hit_rect = self.rect
-        self.hit_rect.center = self.rect.center
 
-        self.image.fill(YELLOW)
+        # self.image.fill(YELLOW)
+        # pg.transform.scale(self.image, (self.rect.size))
+        self.image = self.game.player_img
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x
+        self.rect.y = y
+        self.rect_offset = vec(-10, 0)
+        self.hit_rect = pg.Rect(self.rect.centerx, self.rect.centery,
+                                self.rect.width / 2., self.rect.height)
+        # self.hit_rect.center = self.rect.center
+        print(self.hit_rect)
+        self.dx = 0
+        self.pos = vec(x, y)
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+
+        self.rect.center = self.pos
 
     def events(self):
         self.vel = vec(0, 0)
@@ -106,6 +113,7 @@ class Player(Caracther):
             self.vel.scale_to_length(self.base_speed)
 
     def update(self):
+        # print(self.hit_rect)
         self.step_on_the_floor()
         self.events()
 
@@ -122,7 +130,7 @@ class Player(Caracther):
         self.enter_in_a_house()
         self.leave_the_house()
 
-        self.rect.center = self.pos
+        self.rect.center = self.pos + self.rect_offset
 
     def step_on_the_floor(self):
         self.viscosity = 1

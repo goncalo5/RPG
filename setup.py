@@ -34,7 +34,7 @@ class Game(object):
 
     def load_a_image(self, thing_file, thing_dir_list=['img'],
                      thing_size=None):
-        thing_path = self.load_a_thing(thing_file, thing_dir_list)
+        thing_path = self.load_a_thing(thing_dir_list, thing_file)
         thing_img = pg.image.load(thing_path).convert_alpha()
         if thing_size:
             thing_img = pg.transform.scale(thing_img, thing_size)
@@ -109,6 +109,10 @@ class Game(object):
         self.current_map = self.forest
         self.load_the_map()
 
+        # Hero:
+        self.player_img = self.load_a_image('walk_70000.png',
+                                            ['Imgs', 'Hero', 'Walk'])
+        self.player_img = pg.transform.scale(self.player_img, (50, 50))
         self.player = Player(self, 100, 100)
 
     def run(self):
@@ -150,6 +154,7 @@ class Game(object):
                                (DISPLAY['title'], self.clock.get_fps()))
         self.screen.fill(DISPLAY['bgcolor'])
         self.all_sprites.draw(self.screen)
+        pg.draw.rect(self.screen, (100, 100, 100), self.player.hit_rect, 1)
 
         pg.display.flip()
 
