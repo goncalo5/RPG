@@ -120,6 +120,7 @@ class Player(Caracther):
         self.player_collide_with_a_rock()
 
         self.enter_in_a_house()
+        self.leave_the_house()
 
         self.rect.center = self.pos
 
@@ -154,7 +155,21 @@ class Player(Caracther):
 
             self.game.current_map = self.game.house1
             self.game.load_the_map()
-            self.pos = vec(50, 50)
+            for door in self.game.doors:
+                self.pos = vec(door.rect.centerx, door.rect.centery - self.rect.height)
+                break
+
+    def leave_the_house(self):
+        # print('enter_in_a_house', self.game.doors)
+        hit = pg.sprite.spritecollide(self, self.game.doors, False)
+        if hit:
+            print('enter')
+
+            self.game.current_map = self.game.forest
+            self.game.load_the_map()
+            for house in self.game.houses:
+                self.pos = vec(house.rect.centerx, house.rect.centery + self.rect.height)
+                break
 
 
 class Monster(Caracther):
