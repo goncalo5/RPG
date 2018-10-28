@@ -74,16 +74,26 @@ class Player(Caracther):
     @classmethod
     def load(cls, game):
         cls.player_imgs = {
-            'down': []
+            'N': [],
+            'NE': [],
+            'E': [],
+            'SE': [],
+            'S': [],
+            'SW': [],
+            'W': [],
+            'NW': [],
         }
-        cls.player_img = Load.image(game, 'walk_70000.png', PLAYER['img_dir'])
-        for i in range(10):
-            img = 'walk_7000%s.png' % i
-            load = Load.image(game, img, PLAYER['img_dir'])
-            load = pg.transform.scale(load, (50, 50))
+        directions2nums = {'N': 3, 'NE': 2, 'E': 1, 'SE': 0,
+                           'S': 7, 'SW': 6, 'W': 5, 'NW': 4}
+        # cls.player_img = Load.image(game, 'walk_70000.png', PLAYER['img_dir'])
+        for direction, num in directions2nums.items():
+            for i in range(10):
+                img = 'walk_%s000%s.png' % (num, i)
+                load = Load.image(game, img, PLAYER['img_dir'])
+                load = pg.transform.scale(load, (50, 50))
 
-            cls.player_imgs['down'].append(load)
-        cls.player_img = pg.transform.scale(cls.player_img, (50, 50))
+                cls.player_imgs[direction].append(load)
+        # cls.player_img = pg.transform.scale(cls.player_img, (50, 50))
         game.player = Player(game, 100, 100)
 
     def __init__(self, game, x, y):
@@ -93,23 +103,24 @@ class Player(Caracther):
 
         self.last_update = self.game.now
         self.current_frame = 0
+        self.direction = None
 
         self.weight = 100
         self.viscosity = 1
 
         # self.image.fill(YELLOW)
         # pg.transform.scale(self.image, (self.rect.size))
-        self.image = Player.player_img
+        self.image = Player.player_imgs['S'][0]
         self.rect = self.image.get_rect()
 
-        self.rect.x = x
-        self.rect.y = y
+        # self.rect.x = x
+        # self.rect.y = y
         self.rect_offset = vec(-10, 0)
         self.hit_rect = pg.Rect(self.rect.centerx, self.rect.centery,
                                 self.rect.width / 2., self.rect.height)
-        # self.hit_rect.center = self.rect.center
-        print(self.hit_rect)
-        self.dx = 0
+        self.hit_rect.center = self.rect.center
+
+        # self.dx = 0
         self.pos = vec(x, y)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -206,10 +217,40 @@ class Player(Caracther):
     def animate(self):
         if self.game.now - self.last_update > (200 - self.vel.length()):
             print('change', self.game.now, self.vel)
-            self.last_update = self.game.now
-            length = len(Player.player_imgs['down'])
-            self.current_frame = (self.current_frame + 1) % length
-            self.image = Player.player_imgs['down'][self.current_frame]
+            self.obtain_direction()
+            print(self.direction)
+            if self.direction:
+                self.last_update = self.game.now
+                length = len(Player.player_imgs[self.direction])
+                self.current_frame = (self.current_frame + 1) % length
+                self.image = Player.player_imgs[self.direction][self.current_frame]
+            else:
+                self.imge = Player.player_imgs['S'][0]
+
+    def obtain_direction(self):
+        if self.vel.x == 0:
+            if self.vel.y > 0:
+                self.direction = 'S'
+            elif self.vel.y < 0:
+                self.direction = 'N'
+            else:
+                self.direction = None
+        elif self.vel.y == 0:
+            if self.vel.x > 0:
+                self.direction = 'E'
+            elif self.vel.x < 0:
+                self.direction = 'W'
+        else:
+            if self.vel.x > 0:
+                if self.vel.y > 0:
+                    self.direction = 'SE'
+                elif self.vel.y < 0:
+                    self.direction = 'NE'
+            elif self.vel.x < 0:
+                if self.vel.y > 0:
+                    self.direction = 'SW'
+                elif self.vel.y < 0:
+                    self.direction = 'NW'
 
 
 class Monster(Caracther):
