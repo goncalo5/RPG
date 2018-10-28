@@ -36,7 +36,8 @@ def collide_with_walls(sprite, group, direction):
             if hits[0].rect.centery > sprite.hit_rect.centery:
                 sprite.pos.y = hits[0].rect.top - sprite.hit_rect.height / 2.
             if hits[0].rect.centery < sprite.hit_rect.centery:
-                sprite.pos.y = hits[0].rect.bottom + sprite.hit_rect.height / 2.
+                sprite.pos.y =\
+                    hits[0].rect.bottom + sprite.hit_rect.height / 2.
             sprite.vel.y = 0
             sprite.hit_rect.centery = sprite.pos.y
 
@@ -64,25 +65,15 @@ class Caracther(pg.sprite.Sprite):
         self.actions = actions
 
         self.game = game
-        # self.image = pg.Surface((DISPLAY['tilesize'], DISPLAY['tilesize']))
-        #
-        # self.rect = self.image.get_rect()
 
 
 class Player(Caracther):
 
     @classmethod
     def load(cls, game):
-        cls.player_imgs = {
-            'N': [],
-            'NE': [],
-            'E': [],
-            'SE': [],
-            'S': [],
-            'SW': [],
-            'W': [],
-            'NW': [],
-        }
+        cls.player_imgs = {'N': [], 'NE': [], 'E': [], 'SE': [],
+                           'S': [], 'SW': [], 'W': [],  'NW': [],
+                           }
         directions2nums = {'N': 3, 'NE': 2, 'E': 1, 'SE': 0,
                            'S': 7, 'SW': 6, 'W': 5, 'NW': 4}
         # cls.player_img = Load.image(game, 'walk_70000.png', PLAYER['img_dir'])
@@ -93,7 +84,6 @@ class Player(Caracther):
                 load = pg.transform.scale(load, (50, 50))
 
                 cls.player_imgs[direction].append(load)
-        # cls.player_img = pg.transform.scale(cls.player_img, (50, 50))
         game.player = Player(game, 100, 100)
 
     def __init__(self, game, x, y):
@@ -113,14 +103,11 @@ class Player(Caracther):
         self.image = Player.player_imgs['S'][0]
         self.rect = self.image.get_rect()
 
-        # self.rect.x = x
-        # self.rect.y = y
-        self.rect_offset = vec(-10, 0)
+        self.rect_offset = vec(-10, -10)
         self.hit_rect = pg.Rect(self.rect.centerx, self.rect.centery,
-                                self.rect.width / 2., self.rect.height)
+                                self.rect.width / 2., self.rect.height / 2.)
         self.hit_rect.center = self.rect.center
 
-        # self.dx = 0
         self.pos = vec(x, y)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -192,30 +179,34 @@ class Player(Caracther):
 
     def enter_in_a_house(self):
         # print('enter_in_a_house', self.game.doors)
-        hit = pg.sprite.spritecollide(self, self.game.houses, False)
+        hit = pg.sprite.spritecollide(self, self.game.houses, False,
+                                      collide_hit_rect)
         if hit:
             # print('enter')
 
             self.game.current_map = self.game.house1
             self.game.load_the_map()
             for door in self.game.doors:
-                self.pos = vec(door.rect.centerx, door.rect.centery - self.rect.height)
+                self.pos = vec(door.rect.centerx,
+                               door.rect.centery - self.rect.height)
                 break
 
     def leave_the_house(self):
         # print('enter_in_a_house', self.game.doors)
-        hit = pg.sprite.spritecollide(self, self.game.doors, False)
+        hit = pg.sprite.spritecollide(self, self.game.doors, False,
+                                      collide_hit_rect)
         if hit:
             print('enter')
 
             self.game.current_map = self.game.forest
             self.game.load_the_map()
             for house in self.game.houses:
-                self.pos = vec(house.rect.centerx, house.rect.centery + self.rect.height)
+                self.pos = vec(house.rect.centerx,
+                               house.rect.centery + self.rect.height)
                 break
 
     def animate(self):
-        if self.game.now - self.last_update > (200 - self.vel.length()):
+        if self.game.now - self.last_update > (220 - 1.2 * self.vel.length()):
             print('change', self.game.now, self.vel)
             self.obtain_direction()
             print(self.direction)
@@ -223,7 +214,8 @@ class Player(Caracther):
                 self.last_update = self.game.now
                 length = len(Player.player_imgs[self.direction])
                 self.current_frame = (self.current_frame + 1) % length
-                self.image = Player.player_imgs[self.direction][self.current_frame]
+                self.image =\
+                    Player.player_imgs[self.direction][self.current_frame]
             else:
                 self.imge = Player.player_imgs['S'][0]
 
