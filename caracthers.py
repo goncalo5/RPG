@@ -73,7 +73,16 @@ class Player(Caracther):
 
     @classmethod
     def load(cls, game):
+        cls.player_imgs = {
+            'down': []
+        }
         cls.player_img = Load.image(game, 'walk_70000.png', PLAYER['img_dir'])
+        for i in range(10):
+            img = 'walk_7000%s.png' % i
+            load = Load.image(game, img, PLAYER['img_dir'])
+            load = pg.transform.scale(load, (50, 50))
+
+            cls.player_imgs['down'].append(load)
         cls.player_img = pg.transform.scale(cls.player_img, (50, 50))
         game.player = Player(game, 100, 100)
 
@@ -81,6 +90,9 @@ class Player(Caracther):
         self._layer = PLAYER['layer']
         self.groups = game.all_sprites
         super(Player, self).__init__(game, x, y)
+
+        self.last_update = self.game.now
+        self.current_frame = 0
 
         self.weight = 100
         self.viscosity = 1
@@ -138,6 +150,7 @@ class Player(Caracther):
         self.leave_the_house()
 
         self.rect.center = self.pos + self.rect_offset
+        self.animate()
 
     def step_on_the_floor(self):
         self.viscosity = 1
@@ -189,6 +202,14 @@ class Player(Caracther):
             for house in self.game.houses:
                 self.pos = vec(house.rect.centerx, house.rect.centery + self.rect.height)
                 break
+
+    def animate(self):
+        if self.game.now - self.last_update > (200 - self.vel.length()):
+            print('change', self.game.now, self.vel)
+            self.last_update = self.game.now
+            length = len(Player.player_imgs['down'])
+            self.current_frame = (self.current_frame + 1) % length
+            self.image = Player.player_imgs['down'][self.current_frame]
 
 
 class Monster(Caracther):

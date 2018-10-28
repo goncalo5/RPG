@@ -93,6 +93,7 @@ class Game(object):
 
     def new(self):
         # start a new game
+        self.now = pg.time.get_ticks()
 
         # sprites:
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -119,6 +120,7 @@ class Game(object):
         self.running = True
         while self.running:
             self.dt = self.clock.tick(DISPLAY['fps']) / 1000.
+            self.now = pg.time.get_ticks()
             self.events()
             self.update()
             self.draw()
