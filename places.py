@@ -1,12 +1,68 @@
 #!/usr/bin/python
 import random
 import pygame as pg
+import pytmx
+from pytmx.util_pygame import load_pygame
 
 # my modules
-from settings import BLUE, GREEN, BROWN, GREY, WHITE, LIGHTBROWN, DARKBROWN
+from settings import BLUE, GREEN, BROWN, GREY, WHITE, LIGHTBROWN, DARKBROWN,\
+    DISPLAY
 # import caracthers
 
 vec = pg.math.Vector2
+
+
+class TiledMap(object):
+    def __init__(self, filename):
+        tm = load_pygame(filename, pixelalpha=True)
+        self.tilesize = tm.tilewidth
+        print(self.tilesize)
+        self.width = tm.width * tm.tilewidth
+        self.height = tm.height * tm.tileheight
+        print(self.width, self.height)
+        self.tmxdata = tm
+
+    def render(self, surface):
+        ti = self.tmxdata.get_tile_image_by_gid
+        for layer in self.tmxdata.visible_layers:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid, in layer:
+                    tile = ti(gid)
+                    if tile:
+                        surface.blit(tile, (x * self.tmxdata.tilewidth,
+                                            y * self.tmxdata.tileheight))
+
+    def make_map(self):
+        temp_surface = pg.Surface((self.width, self.height))
+        self.render(temp_surface)
+        return temp_surface
+
+
+class Camera(object):
+    def __init__(self, width, height):
+        self.camera = pg.Rect(0, 0, width, height)
+        self.width = width
+        self.height = height
+
+    def update(self, target):
+        x = -target.rect.centerx + int(DISPLAY['width'] / 2)
+        y = -target.rect.centery + int(DISPLAY['height'] / 2)
+
+        # limit scrolling to map size
+        x = min(0, x)  # left
+        x = max(-(self.width - DISPLAY['width']), x)  # right
+        y = min(0, y)  # top
+        y = max(-(self.height - DISPLAY['height']), y)  # bottom
+        self.camera = pg.Rect(x, y,  self.width, self.height)
+
+    def apply(self, entity=None, rect=None):
+        # need to use move, because we don't want to change the images
+        # just the images in the camera, and the move returns a new rect
+        # so in that case we don't change the image location,
+        # we create a new location with the returned rect
+        if rect:
+            return rect.move(self.camera.topleft)
+        return entity.rect.move(self.camera.topleft)
 
 
 class Place(pg.sprite.Sprite):
@@ -19,8 +75,8 @@ class Place(pg.sprite.Sprite):
         self.game = game
         self.monsters = {}
         self.width, self.height = width, height
-        self.image = pg.Surface((self.width, self.height))
-        self.rect = self.image.get_rect()
+        # self.image = pg.Surface((self.width, self.height))
+        # self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
@@ -60,10 +116,23 @@ class Rock(Place):
     def __init__(self, game, x, y, width, height):
         groups = game.all_sprites, game.rocks
         super(Rock, self).__init__(game, x, y, width, height, groups)
-        self.image.fill(GREY)
+        # self.image.fill(GREY)
+        self.rect = pg.Rect(x, y, width, height)
         self.pos = vec(self.rect.midbottom)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+
+
+class Obstacle(pg.sprite.Sprite):
+    def __init__(self, game, x, y, width, height):
+        self.groups = game.rocks
+        super(Obstacle, self).__init__(self.groups)
+        self.game = game
+        self.rect = pg.Rect(x, y, width, height)
+        self.x = x
+        self.y = y
+        self.rect.x = self.x
+        self.rect.y = self.y
 
 
 class House(Place):

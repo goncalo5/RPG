@@ -15,9 +15,9 @@ DARKBROWN = (87, 49, 14)
 # Screen
 DISPLAY = {
     'title': "RPG Game",
-    'tilesize': 32,
-    'width': 360,
-    'height': 480,
+    # 'tilesize': 16,
+    'width': 1000,
+    'height': 600,
     'bgcolor': DARKBLUE,
     'fps': 60
 }
@@ -91,7 +91,11 @@ PLAYER = {
     'img_dir': ['Imgs', 'Hero', 'Walk'],
 
     'layer': 2,
+
     'base_speed': 150,
+    'width': 64,
+    'height': 64,
+    'position': {'x': 100, 'y': 100},
 
     "options": ["select item", "explore", "move", "quit"],
     "location": "forest",

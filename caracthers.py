@@ -81,10 +81,12 @@ class Player(Caracther):
             for i in range(10):
                 img = 'walk_%s000%s.png' % (num, i)
                 load = Load.image(game, img, PLAYER['img_dir'])
-                load = pg.transform.scale(load, (50, 50))
+                load = pg.transform.scale(load,
+                                          (PLAYER['width'], PLAYER['height']))
 
                 cls.player_imgs[direction].append(load)
-        game.player = Player(game, 100, 100)
+        # game.player = Player(game,
+        #                      PLAYER['position']['x'], PLAYER['position']['y'])
 
     def __init__(self, game, x, y):
         self._layer = PLAYER['layer']
@@ -192,11 +194,9 @@ class Player(Caracther):
                 break
 
     def leave_the_house(self):
-        # print('enter_in_a_house', self.game.doors)
         hit = pg.sprite.spritecollide(self, self.game.doors, False,
                                       collide_hit_rect)
         if hit:
-            print('enter')
 
             self.game.current_map = self.game.forest
             self.game.load_the_map()
@@ -207,9 +207,7 @@ class Player(Caracther):
 
     def animate(self):
         if self.game.now - self.last_update > (220 - 1.2 * self.vel.length()):
-            print('change', self.game.now, self.vel)
             self.obtain_direction()
-            print(self.direction)
             if self.direction:
                 self.last_update = self.game.now
                 length = len(Player.player_imgs[self.direction])

@@ -1,12 +1,12 @@
-water   , water , ground, ground, ground, ground, ground, grass , ground, ground, grass
-water   , water , ground, grass , ground, grass , ground, grass , grass , ground, grass
-rock    , grass , grass , grass , grass , rock  , rock  , rock  , rock  , grass , grass
-rock    , grass , grass , grass , grass , rock  , rock  , rock  , rock  , grass , grass
-water   , water , grass , grass , grass , rock  , house , house , rock  , grass , grass
-water   , water , grass , grass , grass , grass , grass , grass , grass , grass , grass
-rock    , grass , grass , grass , grass , grass , grass , grass , grass , grass , grass
-rock    , water , water , water , water , water , water , water , water , water , water
-rock    , water , water , water , water , water , water , water , water , water , water
-rock    , water , water , water , water , water , water , water , water , water , water
-rock    , water , water , water , water , water , water , water , water , water , water
-rock    , water , water , water , water , water , water , water , water , water , water
+water   , water , ground, ground, ground, ground, ground, grass , ground, ground, grass, grass, grass, grass, grass, grass, grass
+water   , water , ground, grass , ground, grass , ground, grass , grass , ground, grass, grass, grass, grass, grass, grass, grass
+rock    , grass , grass , grass , grass , rock  , rock  , rock  , rock  , grass , grass, grass, grass, grass, grass, grass, grass
+rock    , grass , grass , grass , grass , rock  , rock  , rock  , rock  , grass , grass, grass, grass, grass, grass, grass, grass
+water   , water , grass , grass , grass , rock  , house , house , rock  , grass , grass, grass, grass, grass, grass, grass, grass
+water   , water , grass , grass , grass , grass , grass , grass , grass , grass , grass, grass, grass, grass, grass, grass, grass
+rock    , grass , grass , grass , grass , grass , grass , grass , grass , grass , grass, grass, grass, grass, grass, grass, grass
+rock    , water , water , water , water , water , water , water , water , water , water, water, water, water, water, water, water
+rock    , water , water , water , water , water , water , water , water , water , water, water, water, water, water, water, water
+rock    , water , water , water , water , water , water , water , water , water , water, water, water, water, water, water, water
+rock    , water , water , water , water , water , water , water , water , water , water, water, water, water, water, water, water
+rock    , water , water , water , water , water , water , water , water , water , water, water, water, water, water, water, water
