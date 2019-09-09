@@ -8,9 +8,9 @@
     orientation: "horizontal"
     padding: 20
 
-<ForestScreen@Screen>:
+<PlaceScreen@Screen>:
     Label:
-        text: "Forest"
+        text: root.place_name
 
 <InitScreen@Screen>:
     BoxVertical:
@@ -24,11 +24,11 @@
             Label:
                 text: "Place:"
             Spinner:
-                text: app.player.place
+                text: app.player.place.name
                 values: settings.PLACES.keys()
                 on_text:
                     print("The spinner {} has text {}".format(self, self.text))
-                    app.player.change_place(self.text, change_screen=False)
+                    app.player.change_place(self.text)
                     print(app.player.place)
         BoxHorizontal:
             Label:
@@ -39,7 +39,6 @@
                 values: settings.INIT.get("items_chose")
                 on_text:
                     print("The spinner {} has text {}".format(self, self.text))
-                    # app.player.add_one_item(self.text)
                     print(app.player.items)
                     app.player.calc_gold_left(self.text)
             BoxVertical:
@@ -57,14 +56,18 @@
             Button:
                 text: "Next"
                 on_press:
-                    root.manager.current = getattr(app, app.player.place).screen
-                    # app.player.change_place()
+                    # root.manager.current = getattr(app, app.player.place).screen
+                    print(app.player.place.name)
+                    root.manager.current = "place_screen"
+
 
 <Manager>:
     id: manager
+    place_screen: place_screen
     InitScreen:
         name: "init_screen"
         manager: manager
-    ForestScreen:
-        name: "forest_screen"
+    PlaceScreen:
+        id: place_screen
+        name: "place_screen"
         manager: manager

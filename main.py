@@ -4,7 +4,7 @@ from kivy import properties as kp
 from kivy.event import EventDispatcher
 from kivy.clock import Clock
 # kivy - uix:
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, Screen
 # mine:
 from settings import COINS, INIT, ITEMS, WEAPONS, PLACES
 
@@ -38,15 +38,17 @@ class Weapon(Item):
 
 
 class Place(EventDispatcher):
+    name = kp.StringProperty()
     def __init__(self, name):
         super().__init__()
         self.settings = PLACES.get(name)
-        self.screen = self.settings.get("screen")
+        self.name = self.settings.get("name", "")
 
 
 class Player(EventDispatcher):
     name = kp.StringProperty()
-    place = kp.StringProperty("forest")
+    place_name = kp.StringProperty("forest")
+    place = kp.ObjectProperty(Place("forest"))
     items = kp.ListProperty()
     app = kp.ObjectProperty()
     gold = kp.NumericProperty(INIT.get("gold"))
@@ -55,14 +57,19 @@ class Player(EventDispatcher):
     def __init__(self):
         super().__init__()
         Clock.schedule_once(self.init_app, 0)
+        Clock.schedule_once(self.on_place_name, 0)
 
     def init_app(self, dt):
         self.app = App.get_running_app()
 
-    def change_place(self, new_place, change_screen=True):
-        self.place = new_place
-        if change_screen:
-            self.app.manager.current = new_place
+    def change_place(self, new_place):
+        self.place_name = new_place
+
+    def on_place_name(self, *args):
+        print("on_place_name", args)
+        self.place = getattr(self.app, self.place_name)
+        print(self.place.name)
+        self.app.manager.place_screen.place_name = self.place.name
 
     def add_one_item(self, item):
         self.items.append(item)
@@ -74,19 +81,26 @@ class Player(EventDispatcher):
         self.gold = INIT.get("gold") - item.cost
 
 
+class PlaceScreen(Screen):
+    place_name = kp.StringProperty()
+
+
 class Manager(ScreenManager):
     pass
 
 
 class GameApp(App):
+    manager = kp.ObjectProperty(None)
     player = kp.ObjectProperty(Player())
-    forest = kp.ObjectProperty(Place("forest"))
 
     def build(self):
-        self.create_all_items()
-        return Manager()
+        self.new()
+        self.manager = Manager()
+        return self.manager
 
-    def create_all_items(self):
+    def new(self):
+
+        # Items:
         dictionary = ITEMS
         for weapon_name, settings in dictionary.items():
             print("\nweapon_name", weapon_name)
@@ -94,6 +108,7 @@ class GameApp(App):
                 continue
             settings = dictionary.get(weapon_name)
             setattr(self, weapon_name, Weapon(settings))
+        # Weapons:
         dictionary = WEAPONS.get("simple_melee_weapon")
         for weapon_name, settings in dictionary.items():
             print("\nweapon_name", weapon_name)
@@ -109,6 +124,10 @@ class GameApp(App):
             print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
             setattr(self, weapon_name, Weapon(settings))
+
+        # Places:
+        for place_name in PLACES:
+            setattr(self, place_name, Place(place_name))
 
 
 

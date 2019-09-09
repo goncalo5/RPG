@@ -2519,7 +2519,7 @@ ORDER_OF_CARACTERISTICS_TO_PRINT = ["hp", "armor", "init", "speed"]
 # Places
 
 forest = {
-    "screen": "forest_screen",
+    "name": "Forest",
     "monsters": {
         "bat": 10,
         # "black_bear": 1,
@@ -2537,19 +2537,23 @@ forest = {
     "probabilities": {"monsters": 0.9, "tree": 0.0, "apples": 0.0},
 }
 plains = {
+    "name": "Plains",
 
 }
 montain = {
+    "name": "Montain",
     "monsters": {
         "bear": 3,
     },
 }
 desert = {
+    "name": "Desert",
     "monsters": {
         "snake": 10,
     },
 }
 village = {
+    "name": "Village",
     "options": ["house", "market", "smith"],
 }
 mine = {
