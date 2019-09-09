@@ -1055,20 +1055,24 @@ smith = {
 }
 
 COINS = {
-    "copper": {
+    "cp": {
         "symbol": "cp",
+        "name": "copper",
         "value": 1,
     },
-    "silver": {
+    "sp": {
         "symbol": "sp",
+        "name": "silver",
         "value": 10,
     },
-    "gold": {
+    "gp": {
         "symbol": "gp",
+        "name": "gold",
         "value": 100,
     },
-    "platinum": {
+    "pp": {
         "symbol": "pp",
+        "name": "platinum",
         "value": 1000,
     },
     "weight": "0.065 lb",
@@ -1257,6 +1261,8 @@ WEAPONS = {
             "properties": ["thrown (range 20/60)", "versatile (1d8)"],
         },
         "unarmed_strike": {
+            "cost": 0,
+            "weight": 0,
             "damage": "1",
             "damage_type": "bludgeoning",
         },
@@ -1454,8 +1460,15 @@ WEAPONS = {
     },
 }
 
+INIT = {
+    "gold": 20,
+    "items_chose": ["backpack", "crowbar", "net", "whip", "pike", "spear", "dagger"]
+}
+
+
+
 ITEMS = {
-    "packs:": {
+    "packs": {
         "burglar's_pack": {
             "cost": 16,
             "content": ["backpack", "ball_bearings", "10 ft string", "bell", "5 candles",
@@ -2506,6 +2519,7 @@ ORDER_OF_CARACTERISTICS_TO_PRINT = ["hp", "armor", "init", "speed"]
 # Places
 
 forest = {
+    "screen": "forest_screen",
     "monsters": {
         "bat": 10,
         # "black_bear": 1,

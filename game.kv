@@ -1,10 +1,70 @@
+#:import settings settings
+
+<BoxVertical@BoxLayout>:
+    orientation: "vertical"
+    padding: 20
+
+<BoxHorizontal@BoxLayout>:
+    orientation: "horizontal"
+    padding: 20
+
+<ForestScreen@Screen>:
+    Label:
+        text: "Forest"
 
 <InitScreen@Screen>:
-    Label:
-        text: "Init"
+    BoxVertical:
+        Label:
+            text: "Init"
+        BoxHorizontal:
+            Label:
+                text: "Your name:"
+            TextInput:
+        BoxHorizontal:
+            Label:
+                text: "Place:"
+            Spinner:
+                text: app.player.place
+                values: settings.PLACES.keys()
+                on_text:
+                    print("The spinner {} has text {}".format(self, self.text))
+                    app.player.change_place(self.text, change_screen=False)
+                    print(app.player.place)
+        BoxHorizontal:
+            Label:
+                text: "Item:"
+            Spinner:
+                id: item_to_add
+                text: settings.INIT.get("items_chose")[0]
+                values: settings.INIT.get("items_chose")
+                on_text:
+                    print("The spinner {} has text {}".format(self, self.text))
+                    # app.player.add_one_item(self.text)
+                    print(app.player.items)
+                    app.player.calc_gold_left(self.text)
+            BoxVertical:
+                Label:
+                    text: "cost: %s" % (getattr(app, item_to_add.text).cost if item_to_add.text else 0)
+                Label:
+                    text: "weight: %s" % (getattr(app, item_to_add.text).weight if item_to_add.text else 0)
+                Label:
+                    text: "damage: %s" % (getattr(app, item_to_add.text).damage if item_to_add.text else 0)
+                Label:
+                    text: "damage_type: %s" % (getattr(app, item_to_add.text).damage_type if item_to_add.text else 0)
+        BoxHorizontal:
+            Label:
+                text: "Gold: %s" % app.player.gold
+            Button:
+                text: "Next"
+                on_press:
+                    root.manager.current = getattr(app, app.player.place).screen
+                    # app.player.change_place()
 
 <Manager>:
     id: manager
     InitScreen:
         name: "init_screen"
+        manager: manager
+    ForestScreen:
+        name: "forest_screen"
         manager: manager
