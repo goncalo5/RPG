@@ -269,8 +269,9 @@ human = {
             "modifier": "+ 2d10",
         },
         "weight": {
-            "base": "110 lb",
-            "modifier": "* 2d4 lb",
+            # "base": "110 lb",
+            "base": "70",
+            # "modifier": "* 2d4 lb",
         },
     },
 }

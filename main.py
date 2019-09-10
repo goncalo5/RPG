@@ -6,7 +6,7 @@ from kivy.clock import Clock
 # kivy - uix:
 from kivy.uix.screenmanager import ScreenManager, Screen
 # mine:
-from settings import COINS, INIT, ITEMS, WEAPONS, PLACES
+from settings import COINS, INIT, ITEMS, WEAPONS, PLACES, human
 
 
 def convert_to_gold(coins):
@@ -53,6 +53,9 @@ class Player(EventDispatcher):
     app = kp.ObjectProperty()
     gold = kp.NumericProperty(INIT.get("gold"))
     # item_selected = kp.ObjectProperty()
+    hp = kp.NumericProperty(100)
+    speed = kp.NumericProperty(human.get("speed").get("walk"))
+    weight = kp.NumericProperty()
 
     def __init__(self):
         super().__init__()
@@ -71,8 +74,20 @@ class Player(EventDispatcher):
         print(self.place.name)
         self.app.manager.place_screen.place_name = self.place.name
 
-    def add_one_item(self, item):
+    def add_one_item(self, item_name):
+        print("add_one_item", item_name)
+        item = getattr(self.app, item_name)
         self.items.append(item)
+
+    def on_items(self, *args):
+        print("on_items", args)
+        self.update_the_weight_carried()
+
+    def update_the_weight_carried(self):
+        print("update_the_weight_carried")
+        self.weight = 0
+        for item in self.items:
+            self.weight += item.weight
 
     def calc_gold_left(self, item_name):
         print("calc_gold_left", item_name)
