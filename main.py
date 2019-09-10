@@ -47,8 +47,8 @@ class Place(EventDispatcher):
 
 class Player(EventDispatcher):
     name = kp.StringProperty()
-    place_name = kp.StringProperty("forest")
-    place = kp.ObjectProperty(Place("forest"))
+    place_name = kp.StringProperty(INIT.get("default_place"))
+    place = kp.ObjectProperty(Place(INIT.get("default_place")))
     items = kp.ListProperty()
     app = kp.ObjectProperty()
     gold = kp.NumericProperty(INIT.get("gold"))

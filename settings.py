@@ -1462,6 +1462,7 @@ WEAPONS = {
 
 INIT = {
     "gold": 20,
+    "default_place": "village",
     "items_chose": ["backpack", "crowbar", "net", "whip", "pike", "spear", "dagger"]
 }
 

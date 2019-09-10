@@ -8,9 +8,33 @@
     orientation: "horizontal"
     padding: 20
 
+<PlayerMenu@BoxHorizontal>:
+    BoxVertical:
+        Label:
+            text: "name:"
+        Label:
+            text: "%s" % app.player.name
+    BoxVertical:
+        Label:
+            text: "gold:"
+        Label:
+            text: "%s" % app.player.gold
+
+
 <PlaceScreen@Screen>:
-    Label:
-        text: root.place_name
+    BoxVertical:
+        PlayerMenu
+        BoxHorizontal:
+            Label:
+                text: root.place_name
+            Button:
+                text: "change place"
+        BoxHorizontal:
+            Button:
+                text: "explore"
+            Button:
+                text: "buildings"
+    
 
 <InitScreen@Screen>:
     BoxVertical:
@@ -20,6 +44,8 @@
             Label:
                 text: "Your name:"
             TextInput:
+                id: player_name
+                multiline: False
         BoxHorizontal:
             Label:
                 text: "Place:"
@@ -57,6 +83,7 @@
                 text: "Next"
                 on_press:
                     # root.manager.current = getattr(app, app.player.place).screen
+                    app.player.name = player_name.text
                     print(app.player.place.name)
                     root.manager.current = "place_screen"
 
