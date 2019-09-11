@@ -32,9 +32,12 @@ def convert_dices2value(dices):
 
 
 class Item(EventDispatcher):
-    def __init__(self, settings):
+    damage = kp.StringProperty("")
+    damage_type = kp.StringProperty("")
+    def __init__(self, settings, item_name):
         super().__init__()
         # print("Item", settings)
+        self.name = item_name
         self.settings = settings
         # print("self.settings", self.settings)
         self.cost = convert_to_gold(self.settings.get("cost"))
@@ -43,10 +46,10 @@ class Item(EventDispatcher):
 
 
 class Weapon(Item):
-    def __init__(self, name):
-        super().__init__(name)
-        self.damage = self.settings.get("damage")
-        self.damage_type = self.settings.get("damage_type")
+    def __init__(self, name, weapon_name):
+        super().__init__(name, weapon_name)
+        self.damage = self.settings.get("damage", "")
+        self.damage_type = self.settings.get("damage_type", "")
 
 
 class Place(EventDispatcher):
@@ -61,7 +64,6 @@ class Player(EventDispatcher):
     name = kp.StringProperty()
     place_name = kp.StringProperty(INIT.get("default_place"))
     place = kp.ObjectProperty(Place(INIT.get("default_place")))
-    items = kp.ListProperty()
     app = kp.ObjectProperty()
     gold = kp.NumericProperty(INIT.get("gold"))
     level = kp.NumericProperty(1)
@@ -70,6 +72,24 @@ class Player(EventDispatcher):
     hp = kp.NumericProperty(INIT.get("hp"))
     speed = kp.NumericProperty(human.get("speed").get("walk"))
     carried = kp.NumericProperty()
+    # items:
+    items = kp.ListProperty()
+    items_names = kp.ListProperty()
+    items_in_use = kp.ListProperty()
+    items_in_use_names = kp.ListProperty()
+    items_unuse = kp.ListProperty()
+    items_availables_names = kp.ListProperty(["unequiped"])
+    left_hand = kp.ObjectProperty()
+    left_hand_name = kp.StringProperty("unequiped")
+    right_hand = kp.ObjectProperty()
+    right_hand_name = kp.StringProperty("unequiped")
+    armor = kp.ObjectProperty()
+    armor_name = kp.StringProperty("unequiped")
+    equiped = {
+        "left_hand": "unequiped",
+        "right_hand": "unequiped",
+        "armor": "unequiped"
+    }
 
     def __init__(self):
         super().__init__()
@@ -86,12 +106,15 @@ class Player(EventDispatcher):
         print("on_place_name", args)
         self.place = getattr(self.app, self.place_name)
         print(self.place.name)
-        self.app.manager.place_screen.place_name = self.place.name
+        self.app.manager.over_view.place_name = self.place.name
 
     def add_one_item(self, item_name):
         print("add_one_item", item_name)
         item = getattr(self.app, item_name)
         self.items.append(item)
+        self.items_names.append(item.name)
+        self.items_unuse.append(item)
+        self.items_availables_names.append(item.name)
 
     def on_items(self, *args):
         print("on_items", args)
@@ -108,9 +131,40 @@ class Player(EventDispatcher):
         item = getattr(self.app, item_name)
         print(item, item.cost, dir(item))
         self.gold = INIT.get("gold") - item.cost
+    
+    def change_equipment(self, spinner, new_equipment_name, side_name):
+        if spinner.selected:
+            return
+        spinner.selected = True
+        print()
+        print("change_equipment", new_equipment_name, side_name)
+        print("equiped: %s, items_in_use: %s, items_availables_names: %s" % \
+            (self.equiped, self.items_in_use_names, self.items_availables_names))
+        
+        if new_equipment_name not in self.items_availables_names:
+            spinner.text = "unequiped"
+            spinner.selected = False
+            return
+
+        if new_equipment_name == "unequiped":
+            previous = self.equiped[side_name]
+            print("previous", previous)
+            self.items_in_use_names.remove(previous)
+            self.items_availables_names.append(previous)
+        else:
+            self.equiped[side_name] = new_equipment_name
+            self.items_in_use_names.append(new_equipment_name)
+            self.items_availables_names.remove(new_equipment_name)
+        
 
 
-class PlaceScreen(Screen):
+
+        print("equiped: %s, items_in_use: %s, self.items_availables_names: %s" % \
+            (self.equiped, self.items_in_use_names, self.items_availables_names))
+        spinner.selected = False
+
+
+class OverView(Screen):
     place_name = kp.StringProperty()
 
 
@@ -131,28 +185,28 @@ class GameApp(App):
 
         # Items:
         dictionary = ITEMS
-        for weapon_name, settings in dictionary.items():
-            # print("\nweapon_name", weapon_name)
+        for item_name, settings in dictionary.items():
+            # print("\nitem_name", item_name)
             if "cost" not in settings:
                 continue
-            settings = dictionary.get(weapon_name)
-            setattr(self, weapon_name, Weapon(settings))
+            settings = dictionary.get(item_name)
+            setattr(self, item_name, Item(settings, item_name))
         # Weapons:
         dictionary = WEAPONS.get("simple_melee_weapon")
         for weapon_name, settings in dictionary.items():
             # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
-            setattr(self, weapon_name, Weapon(settings))
+            setattr(self, weapon_name, Weapon(settings, weapon_name))
         dictionary = WEAPONS.get("martial_melee_weapon")
         for weapon_name, settings in dictionary.items():
             # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
-            setattr(self, weapon_name, Weapon(settings))
+            setattr(self, weapon_name, Weapon(settings, weapon_name))
         dictionary = WEAPONS.get("martial_ranged_weapon")
         for weapon_name, settings in dictionary.items():
             # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
-            setattr(self, weapon_name, Weapon(settings))
+            setattr(self, weapon_name, Weapon(settings, weapon_name))
 
         # Places:
         for place_name in PLACES:

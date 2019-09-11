@@ -8,45 +8,82 @@
     orientation: "horizontal"
     padding: 20
 
-<PlayerMenu@BoxHorizontal>:
-    BoxVertical:
-        Label:
-            text: "name:"
-        Label:
-            text: "%s" % app.player.name
-    BoxVertical:
-        Label:
-            text: "gold:"
-        Label:
-            text: "%s" % app.player.gold
-    BoxVertical:
-        Label:
-            text: "hp:"
-        Label:
-            text: "%s" % app.player.hp
-    BoxVertical:
-        Label:
-            text: "speed:"
-        Label:
-            text: "%s" % app.player.speed
-    BoxVertical:
-        Label:
-            text: "carried:"
-        Label:
-            text: "%s" % app.player.carried
-    BoxVertical:
-        Label:
-            text: "level:"
-        Label:
-            text: "%s" % app.player.level
-    BoxVertical:
-        Label:
-            text: "xp:"
-        Label:
-            text: "%s" % app.player.xp
+<PlayerMenu@BoxVertical>:
+    BoxHorizontal:
+        BoxVertical:
+            Label:
+                text: "name:"
+            Label:
+                text: "%s" % app.player.name
+        BoxVertical:
+            Label:
+                text: "gold:"
+            Label:
+                text: "%s" % app.player.gold
+        BoxVertical:
+            Label:
+                text: "hp:"
+            Label:
+                text: "%s" % app.player.hp
+        BoxVertical:
+            Label:
+                text: "speed:"
+            Label:
+                text: "%s" % app.player.speed
+        BoxVertical:
+            Label:
+                text: "carried:"
+            Label:
+                text: "%s" % app.player.carried
+        BoxVertical:
+            Label:
+                text: "level:"
+            Label:
+                text: "%s" % app.player.level
+        BoxVertical:
+            Label:
+                text: "xp:"
+            Label:
+                text: "%s" % app.player.xp
+    BoxHorizontal:
+        BoxVertical:
+            Label:
+                text: "items"
+            Spinner:
+                text: "list"
+                values: app.player.items_names
+                on_text:
+                    self.text = "list"
+        BoxVertical:
+            Label:
+                text: "left hand"
+            Spinner:
+                selected: False
+                text: app.player.equiped["left_hand"]
+                values: app.player.items_availables_names
+                on_text:
+                    app.player.change_equipment(self, self.text, "left_hand")
+        BoxVertical:
+            Label:
+                text: "armor"
+            Spinner:
+                selected: False
+                text: app.player.equiped["armor"]
+                values: app.player.items_availables_names
+                on_text:
+                    app.player.change_equipment(self, self.text, "armor")
+        BoxVertical:
+            Label:
+                text: "right hand"
+            Spinner:
+                selected: False
+                text: app.player.equiped["right_hand"]
+                values: app.player.items_availables_names
+                on_text:
+                    print(55)
+                    app.player.change_equipment(self, self.text, "right_hand")
 
-
-<PlaceScreen>:
+<OverView>:
     BoxVertical:
         PlayerMenu
         BoxHorizontal:
@@ -86,7 +123,7 @@
                 text: "Item:"
             Spinner:
                 id: item_to_add
-                text: settings.INIT.get("items_chose")[0]
+                # text: settings.INIT.get("items_chose")[0]
                 values: settings.INIT.get("items_chose")
                 on_text:
                     print("The spinner {} has text {}".format(self, self.text))
@@ -111,16 +148,16 @@
                     app.player.name = player_name.text
                     app.player.add_one_item(item_to_add.text)
                     print(app.player.place.name)
-                    root.manager.current = "place_screen"
+                    root.manager.current = "over_view"
 
 
 <Manager>:
     id: manager
-    place_screen: place_screen
+    over_view: v
     InitScreen:
         name: "init_screen"
         manager: manager
-    PlaceScreen:
-        id: place_screen
-        name: "place_screen"
+    OverView:
+        id: over_view
+        name: "over_view"
         manager: manager
