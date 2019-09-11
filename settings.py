@@ -89,6 +89,13 @@ XP_BY_LEVEL = [
     85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000
 ]
 
+LEVELS = {
+    "a": 100,
+    "b": 1.5,
+    "xp": "a*(b**(level-1)-1)",
+    "lv": "log(xp/a+1,b)+1"
+}
+
 PROFICIENCY_BONUS_BY_LEVEL = [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6]
 
 dwarf = {
@@ -1079,6 +1086,13 @@ COINS = {
     "weight": "0.065 lb",
 }
 
+INIT = {
+    "gold": 20,
+    "default_place": "village",
+    "items_chose": ["backpack", "crowbar", "net", "whip", "pike", "spear", "dagger"],
+    "hp": 12
+}
+
 ARMOR = {
     # don = time it takes to put on armor
     # doff = time it takes to take off armor
@@ -1460,14 +1474,6 @@ WEAPONS = {
         },
     },
 }
-
-INIT = {
-    "gold": 20,
-    "default_place": "village",
-    "items_chose": ["backpack", "crowbar", "net", "whip", "pike", "spear", "dagger"]
-}
-
-
 
 ITEMS = {
     "packs": {

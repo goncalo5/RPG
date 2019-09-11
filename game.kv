@@ -31,12 +31,22 @@
             text: "%s" % app.player.speed
     BoxVertical:
         Label:
-            text: "weight:"
+            text: "carried:"
         Label:
-            text: "%s" % app.player.weight
+            text: "%s" % app.player.carried
+    BoxVertical:
+        Label:
+            text: "level:"
+        Label:
+            text: "%s" % app.player.level
+    BoxVertical:
+        Label:
+            text: "xp:"
+        Label:
+            text: "%s" % app.player.xp
 
 
-<PlaceScreen@Screen>:
+<PlaceScreen>:
     BoxVertical:
         PlayerMenu
         BoxHorizontal:

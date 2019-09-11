@@ -1,3 +1,5 @@
+# python:
+import random
 # kivy:
 from kivy.app import App
 from kivy import properties as kp
@@ -10,7 +12,7 @@ from settings import COINS, INIT, ITEMS, WEAPONS, PLACES, human
 
 
 def convert_to_gold(coins):
-    print("convert_to_gold", coins)
+    # print("convert_to_gold", coins)
     try:
         coins = int(coins)
         return coins
@@ -19,14 +21,24 @@ def convert_to_gold(coins):
         copper = int(n_coins) * COINS.get(coin_name).get("value")
         return copper / 100
 
+
+def convert_dices2value(dices):
+    # print("convert_dices2value", dices)
+    n, dice = dices.split("d")
+    # print(n, dice)
+    value = int(n) * random.randint(1, int(dice))
+    # print(value)
+    return value
+
+
 class Item(EventDispatcher):
     def __init__(self, settings):
         super().__init__()
-        print("Item", settings)
+        # print("Item", settings)
         self.settings = settings
-        print("self.settings", self.settings)
+        # print("self.settings", self.settings)
         self.cost = convert_to_gold(self.settings.get("cost"))
-        print("cost", self.cost)
+        # print("cost", self.cost)
         self.weight = self.settings.get("weight")
 
 
@@ -52,10 +64,12 @@ class Player(EventDispatcher):
     items = kp.ListProperty()
     app = kp.ObjectProperty()
     gold = kp.NumericProperty(INIT.get("gold"))
+    level = kp.NumericProperty(1)
+    xp = kp.NumericProperty(0)
     # item_selected = kp.ObjectProperty()
-    hp = kp.NumericProperty(100)
+    hp = kp.NumericProperty(INIT.get("hp"))
     speed = kp.NumericProperty(human.get("speed").get("walk"))
-    weight = kp.NumericProperty()
+    carried = kp.NumericProperty()
 
     def __init__(self):
         super().__init__()
@@ -85,9 +99,9 @@ class Player(EventDispatcher):
 
     def update_the_weight_carried(self):
         print("update_the_weight_carried")
-        self.weight = 0
+        self.carried = 0
         for item in self.items:
-            self.weight += item.weight
+            self.carried += item.weight
 
     def calc_gold_left(self, item_name):
         print("calc_gold_left", item_name)
@@ -118,7 +132,7 @@ class GameApp(App):
         # Items:
         dictionary = ITEMS
         for weapon_name, settings in dictionary.items():
-            print("\nweapon_name", weapon_name)
+            # print("\nweapon_name", weapon_name)
             if "cost" not in settings:
                 continue
             settings = dictionary.get(weapon_name)
@@ -126,17 +140,17 @@ class GameApp(App):
         # Weapons:
         dictionary = WEAPONS.get("simple_melee_weapon")
         for weapon_name, settings in dictionary.items():
-            print("\nweapon_name", weapon_name)
+            # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
             setattr(self, weapon_name, Weapon(settings))
         dictionary = WEAPONS.get("martial_melee_weapon")
         for weapon_name, settings in dictionary.items():
-            print("\nweapon_name", weapon_name)
+            # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
             setattr(self, weapon_name, Weapon(settings))
         dictionary = WEAPONS.get("martial_ranged_weapon")
         for weapon_name, settings in dictionary.items():
-            print("\nweapon_name", weapon_name)
+            # print("\nweapon_name", weapon_name)
             settings = dictionary.get(weapon_name)
             setattr(self, weapon_name, Weapon(settings))
 
