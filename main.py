@@ -68,11 +68,11 @@ class Player(EventDispatcher):
     gold = kp.NumericProperty(INIT.get("gold"))
     level = kp.NumericProperty(1)
     xp = kp.NumericProperty(0)
-    # item_selected = kp.ObjectProperty()
-    hp = kp.NumericProperty(INIT.get("hp"))
-    atk = kp.StringProperty()
     speed = kp.NumericProperty(human.get("speed").get("walk"))
     carried = kp.NumericProperty()
+    # combat:
+    hp = kp.NumericProperty(INIT.get("hp"))
+    atk = kp.StringProperty()
     # items:
     items = kp.ListProperty()
     items_names = kp.ListProperty()
@@ -80,12 +80,6 @@ class Player(EventDispatcher):
     items_in_use_names = kp.ListProperty()
     items_unuse = kp.ListProperty()
     items_availables_names = kp.ListProperty([" - "])
-    off_hand = kp.ObjectProperty()
-    off_hand_name = kp.StringProperty(" - ")
-    main_hand = kp.ObjectProperty()
-    main_hand_name = kp.StringProperty(" - ")
-    armor = kp.ObjectProperty()
-    armor_name = kp.StringProperty(" - ")
     equiped = {
         "off_hand": " - ",
         "main_hand": " - ",

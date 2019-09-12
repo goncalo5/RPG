@@ -200,6 +200,7 @@
                 text: "Item:"
             Spinner:
                 id: item_to_add
+                text: settings.INIT.get("default_item")
                 # text: settings.INIT.get("items_chose")[0]
                 values: settings.INIT.get("items_chose")
                 on_text:

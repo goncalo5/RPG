@@ -1089,6 +1089,7 @@ COINS = {
 INIT = {
     "gold": 20,
     "default_place": "village",
+    "default_item": "dagger",
     "items_chose": ["backpack", "crowbar", "net", "whip", "pike", "spear", "dagger"],
     "hp": 12
 }
