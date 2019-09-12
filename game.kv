@@ -22,12 +22,16 @@
             background_color: 1, 1, 1, 0.7
             on_press:
                 root.menu_manager.current = "player_menu"
-
+                lateral.right = button.width
+                button.text = "->"
         Button:
             text: 'Explore'
             background_color: 1, 1, 1, 0.7
             on_press:
-                root.menu_manager.current = "explore"
+                root.menu_manager.explore_menu.find_another_enemy(app)
+                root.menu_manager.current = "explore_menu"
+                lateral.right = button.width
+                button.text = "->"
         Button:
             text: 'Smith'
             background_color: 1, 1, 1, 0.7
@@ -142,7 +146,31 @@
                         print(55)
                         app.player.change_equipment(self, self.text, "main_hand")
 
-<ExploreMenu@Screen>:
+<ExploreMenu>:
+    BoxVertical:
+        BoxHorizontal:
+            id: enemy
+            BoxVertical:
+                Label:
+                    text: "%s" % root.enemy_name
+                Label:
+                    text: "hp: %s" % root.enemy_hp
+                Label:
+                    text: "atk: %s" % root.enemy_atk
+            Image:
+                source: root.enemy_img
+        BoxHorizontal:
+            id: player
+            BoxVertical:
+                Label:
+                    text: "%s" % app.player.name
+                Label:
+                    text: "hp: %s" % app.player.hp
+                Label:
+                    text: "atk: %s" % app.player.atk
+
+            
+
 <SmithMenu@Screen>:
 <TavernMenu@Screen>:
 <MarketMenu@Screen>:
@@ -213,13 +241,14 @@
 
 <MenuManager>:
     id: menu_manager
+    explore_menu: explore_menu
     PlayerMenu:
         id: player_menu
         name: "player_menu"
         manager: menu_manager
     ExploreMenu:
-        id: explore
-        name: "explore"
+        id: explore_menu
+        name: "explore_menu"
         manager: menu_manager
 
 <Manager>:

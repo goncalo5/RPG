@@ -2521,6 +2521,8 @@ mastiff = {
 }
 
 WARRIOR = {
+    "img": "Imgs/NPCs/guerreiro.jpg",
+
     "type": "human",
     "size": "medium",
     "alignment": "unaligned",
@@ -2530,6 +2532,7 @@ WARRIOR = {
     "speed": {
         "walk": 30,
     },
+    "weapons": ["shortsword"],
 
     "strength": 2,
     "dexterity": 15,

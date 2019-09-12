@@ -78,13 +78,25 @@ class Place(EventDispatcher):
         super().__init__()
         self.settings = PLACES.get(name)
         self.name = self.settings.get("name", "")
+        self.enemies = self.settings.get("enemies", [])
 
 
 class Enemy(EventDispatcher):
     def __init__(self, name, settings):
         self.name = name
         self.settings = settings
-        self.hp = convert_dices2value(settings.get("hp"))
+        self.img = self.settings.get("img")
+        self.atk = self.settings.get("atk", 1)
+        # for weapon in self.settings.get("weapons"):
+
+        Clock.schedule_once(self.init_app, 0)
+        self.new()
+    
+    def init_app(self, dt):
+        self.app = App.get_running_app()
+
+    def new(self):
+        self.hp = convert_dices2value(self.settings.get("hp"))
 
 
 
@@ -198,6 +210,23 @@ class Player(EventDispatcher):
 
 class OverView(Screen):
     place_name = kp.StringProperty()
+
+
+class ExploreMenu(Screen):
+    enemy_name = kp.StringProperty()
+    enemy_img = kp.StringProperty()
+    enemy_hp = kp.StringProperty()
+    enemy_atk = kp.StringProperty()
+
+    def find_another_enemy(self, app):
+        print("find_another_enemy")
+        list_possible_enemies = (app.player.place.enemies)
+        self.enemy_name = random.choice(list_possible_enemies)
+        print(self.enemy_name)
+        enemy = getattr(app, self.enemy_name)
+        self.enemy_img = enemy.img
+        self.enemy_hp = str(enemy.hp)
+        self.enemy_atk = str(enemy.atk)
 
 
 class MenuManager(ScreenManager):
