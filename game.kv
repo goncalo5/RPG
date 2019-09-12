@@ -1,25 +1,88 @@
+#:import Animation kivy.animation.Animation
 #:import settings settings
 
 <BoxVertical@BoxLayout>:
     orientation: "vertical"
-    padding: 20
+    padding: 10
 
 <BoxHorizontal@BoxLayout>:
     orientation: "horizontal"
-    padding: 20
+    padding: 10
+
+<LateralBar@BoxHorizontal>:
+    id: lateral
+    size_hint_x: None
+    width: 400
+    right: button.width
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: 'Explore'
+            background_color: 1, 1, 1, 0.7
+        Button:
+            text: 'Smith'
+            background_color: 1, 1, 1, 0.7
+        Button:
+            text: 'Tavern'
+            background_color: 1, 1, 1, 0.7
+        Button:
+            text: 'Market'
+            background_color: 1, 1, 1, 0.7
+    Button:
+        id: button
+        background_color: 1, 1, 1, 0.7
+        text: "->"
+        size_hint_x: None
+        # size: self.texture_size
+        width: 50
+        on_press:
+            dx = 300 if self.text == "->" else -300
+            # lateral.x += dx
+            anim = Animation(x=lateral.x + dx, t='in_quad', duration=0.2)
+            anim.start(lateral)
+            self.text = "<-" if self.text == "->" else "->"
+
+<ActionBar>:
+    pos_hint: {'top':1}
+    ActionView:
+        use_separator: True
+        ActionPrevious:
+            title: 'Village'
+            # app_icon: "bunny1_hurt.png"
+            with_previous: False
+        ActionButton:
+            text: 'Items'
+        ActionButton:
+            text: 'Monsters'
+        ActionButton:
+            text: 'Travel'
+        ActionButton:
+            text: 'options'
+        ActionButton:
+            text: 'profile'
+        ActionButton:
+            text: 'Exit'
 
 <PlayerMenu@BoxVertical>:
-    BoxHorizontal:
-        BoxVertical:
-            Label:
-                text: "name:"
+    BoxVertical:
+        BoxHorizontal:
             Label:
                 text: "%s" % app.player.name
-        BoxVertical:
-            Label:
-                text: "gold:"
-            Label:
-                text: "%s" % app.player.gold
+            BoxVertical:
+                Label:
+                    text: "gold:"
+                Label:
+                    text: "%s" % app.player.gold
+            BoxVertical:
+                Label:
+                    text: "level:"
+                Label:
+                    text: "%s" % app.player.level
+            BoxVertical:
+                Label:
+                    text: "xp:"
+                Label:
+                    text: "%s" % app.player.xp
         BoxVertical:
             Label:
                 text: "hp:"
@@ -34,68 +97,77 @@
             Label:
                 text: "carried:"
             Label:
-                text: "%s" % app.player.carried
-        BoxVertical:
-            Label:
-                text: "level:"
-            Label:
-                text: "%s" % app.player.level
-        BoxVertical:
-            Label:
-                text: "xp:"
-            Label:
-                text: "%s" % app.player.xp
-    BoxHorizontal:
-        BoxVertical:
-            Label:
-                text: "items"
-            Spinner:
-                text: "list"
-                values: app.player.items_names
-                on_text:
-                    self.text = "list"
-        BoxVertical:
-            Label:
-                text: "left hand"
-            Spinner:
-                selected: False
-                text: app.player.equiped["left_hand"]
-                values: app.player.items_availables_names
-                on_text:
-                    app.player.change_equipment(self, self.text, "left_hand")
-        BoxVertical:
-            Label:
-                text: "armor"
-            Spinner:
-                selected: False
-                text: app.player.equiped["armor"]
-                values: app.player.items_availables_names
-                on_text:
-                    app.player.change_equipment(self, self.text, "armor")
-        BoxVertical:
-            Label:
-                text: "right hand"
-            Spinner:
-                selected: False
-                text: app.player.equiped["right_hand"]
-                values: app.player.items_availables_names
-                on_text:
-                    print(55)
-                    app.player.change_equipment(self, self.text, "right_hand")
+                text: "%s kg" % app.player.carried
+        BoxHorizontal:
+            BoxVertical:
+                Label:
+                    text: "second hand"
+                Spinner:
+                    selected: False
+                    text: app.player.equiped["second_hand"]
+                    values: app.player.items_availables_names
+                    on_text:
+                        app.player.change_equipment(self, self.text, "second_hand")
+            BoxVertical:
+                Label:
+                    text: "armor"
+                Spinner:
+                    selected: False
+                    text: app.player.equiped["armor"]
+                    values: app.player.items_availables_names
+                    on_text:
+                        app.player.change_equipment(self, self.text, "armor")
+            BoxVertical:
+                Label:
+                    text: "main hand"
+                Spinner:
+                    selected: False
+                    text: app.player.equiped["main_hand"]
+                    values: app.player.items_availables_names
+                    on_text:
+                        print(55)
+                        app.player.change_equipment(self, self.text, "main_hand")
 
 <OverView>:
     BoxVertical:
+        ActionBar:
+            id: action_bar
         PlayerMenu
-        BoxHorizontal:
-            Label:
-                text: root.place_name
-            Button:
-                text: "change place"
-        BoxHorizontal:
-            Button:
-                text: "explore"
-            Button:
-                text: "buildings"
+    LateralBar:
+        id: lateral
+        # BoxVertical:
+        #     Label:
+        #         text: root.place_name
+        #         size_hint_y: None
+        #         height: 50
+        #     TabbedPanel:
+        #         do_default_tab: False
+        #         # tab_width: self.width / 2
+        #         TabbedPanelItem:
+        #             text: "explore"
+        #         TabbedPanelItem:
+        #             text: "smith"
+        #         TabbedPanelItem:
+        #             text: "tavern"
+        #         TabbedPanelItem:
+        #             text: "market"
+        #     GridLayout:
+        #         cols: 2
+        #         Spinner:
+        #             text: "items"
+        #             values: app.player.items_names
+        #             on_text:
+        #                 self.text = "items"
+        #         Button:
+        #             text: "Monsters"
+        #         Button:
+        #             text: "Travel"
+        #         Button:
+        #             text: "options"
+        #         Button:
+        #             text: "profile"
+        #         Button:
+        #             text: "exit"
     
 
 <InitScreen@Screen>:
@@ -153,7 +225,7 @@
 
 <Manager>:
     id: manager
-    over_view: v
+    over_view: over_view
     InitScreen:
         name: "init_screen"
         manager: manager

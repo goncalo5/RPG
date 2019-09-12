@@ -78,17 +78,17 @@ class Player(EventDispatcher):
     items_in_use = kp.ListProperty()
     items_in_use_names = kp.ListProperty()
     items_unuse = kp.ListProperty()
-    items_availables_names = kp.ListProperty(["unequiped"])
-    left_hand = kp.ObjectProperty()
-    left_hand_name = kp.StringProperty("unequiped")
-    right_hand = kp.ObjectProperty()
-    right_hand_name = kp.StringProperty("unequiped")
+    items_availables_names = kp.ListProperty([" - "])
+    second_hand = kp.ObjectProperty()
+    second_hand_name = kp.StringProperty(" - ")
+    main_hand = kp.ObjectProperty()
+    main_hand_name = kp.StringProperty(" - ")
     armor = kp.ObjectProperty()
-    armor_name = kp.StringProperty("unequiped")
+    armor_name = kp.StringProperty(" - ")
     equiped = {
-        "left_hand": "unequiped",
-        "right_hand": "unequiped",
-        "armor": "unequiped"
+        "second_hand": " - ",
+        "main_hand": " - ",
+        "armor": " - "
     }
 
     def __init__(self):
@@ -142,11 +142,11 @@ class Player(EventDispatcher):
             (self.equiped, self.items_in_use_names, self.items_availables_names))
         
         if new_equipment_name not in self.items_availables_names:
-            spinner.text = "unequiped"
+            spinner.text = " - "
             spinner.selected = False
             return
 
-        if new_equipment_name == "unequiped":
+        if new_equipment_name == " - ":
             previous = self.equiped[side_name]
             print("previous", previous)
             self.items_in_use_names.remove(previous)
