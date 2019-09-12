@@ -14,11 +14,20 @@
     size_hint_x: None
     width: 400
     right: button.width
+    menu_manager: None
     BoxLayout:
         orientation: "vertical"
         Button:
+            text: 'OverView'
+            background_color: 1, 1, 1, 0.7
+            on_press:
+                root.menu_manager.current = "player_menu"
+
+        Button:
             text: 'Explore'
             background_color: 1, 1, 1, 0.7
+            on_press:
+                root.menu_manager.current = "explore"
         Button:
             text: 'Smith'
             background_color: 1, 1, 1, 0.7
@@ -63,7 +72,7 @@
         ActionButton:
             text: 'Exit'
 
-<PlayerMenu@BoxVertical>:
+<PlayerMenu@Screen>:
     BoxVertical:
         BoxHorizontal:
             Label:
@@ -133,46 +142,20 @@
                         print(55)
                         app.player.change_equipment(self, self.text, "main_hand")
 
+<ExploreMenu@Screen>:
+<SmithMenu@Screen>:
+<TavernMenu@Screen>:
+<MarketMenu@Screen>:
+
 <OverView>:
     BoxVertical:
         ActionBar:
             id: action_bar
-        PlayerMenu
+        MenuManager:
+            id: menu_manager
     LateralBar:
         id: lateral
-        # BoxVertical:
-        #     Label:
-        #         text: root.place_name
-        #         size_hint_y: None
-        #         height: 50
-        #     TabbedPanel:
-        #         do_default_tab: False
-        #         # tab_width: self.width / 2
-        #         TabbedPanelItem:
-        #             text: "explore"
-        #         TabbedPanelItem:
-        #             text: "smith"
-        #         TabbedPanelItem:
-        #             text: "tavern"
-        #         TabbedPanelItem:
-        #             text: "market"
-        #     GridLayout:
-        #         cols: 2
-        #         Spinner:
-        #             text: "items"
-        #             values: app.player.items_names
-        #             on_text:
-        #                 self.text = "items"
-        #         Button:
-        #             text: "Monsters"
-        #         Button:
-        #             text: "Travel"
-        #         Button:
-        #             text: "options"
-        #         Button:
-        #             text: "profile"
-        #         Button:
-        #             text: "exit"
+        menu_manager: menu_manager
     
 
 <InitScreen@Screen>:
@@ -227,6 +210,17 @@
                     print(app.player.place.name)
                     root.manager.current = "over_view"
 
+
+<MenuManager>:
+    id: menu_manager
+    PlayerMenu:
+        id: player_menu
+        name: "player_menu"
+        manager: menu_manager
+    ExploreMenu:
+        id: explore
+        name: "explore"
+        manager: menu_manager
 
 <Manager>:
     id: manager

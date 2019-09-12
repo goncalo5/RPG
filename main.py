@@ -171,6 +171,10 @@ class OverView(Screen):
     place_name = kp.StringProperty()
 
 
+class MenuManager(ScreenManager):
+    pass
+
+
 class Manager(ScreenManager):
     pass
 

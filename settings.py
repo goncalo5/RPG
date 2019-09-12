@@ -2520,6 +2520,31 @@ mastiff = {
     }
 }
 
+WARRIOR = {
+    "type": "human",
+    "size": "medium",
+    "alignment": "unaligned",
+
+    "armor": 12,
+    "hp": "2d6+2",
+    "speed": {
+        "walk": 30,
+    },
+
+    "strength": 2,
+    "dexterity": 15,
+    "constitution": 8,
+    "intelligence": 2,
+    "wisdom": 12,
+    "charisma": 4,
+    "senses": {
+    },
+    "xp": 10,
+
+    "actions": {
+    }
+}
+
 # MONSTERS = {"wolf": wolf, "bear": bear, "snake": snake}
 
 ORDER_OF_CARACTERISTICS_TO_PRINT = ["hp", "armor", "init", "speed"]
@@ -2564,6 +2589,9 @@ desert = {
 village = {
     "name": "Village",
     "options": ["house", "market", "smith"],
+    "enemies": {
+        "warrior": WARRIOR
+    }
 }
 mine = {
 
