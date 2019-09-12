@@ -70,6 +70,7 @@ class Player(EventDispatcher):
     xp = kp.NumericProperty(0)
     # item_selected = kp.ObjectProperty()
     hp = kp.NumericProperty(INIT.get("hp"))
+    atk = kp.StringProperty()
     speed = kp.NumericProperty(human.get("speed").get("walk"))
     carried = kp.NumericProperty()
     # items:
@@ -79,14 +80,14 @@ class Player(EventDispatcher):
     items_in_use_names = kp.ListProperty()
     items_unuse = kp.ListProperty()
     items_availables_names = kp.ListProperty([" - "])
-    second_hand = kp.ObjectProperty()
-    second_hand_name = kp.StringProperty(" - ")
+    off_hand = kp.ObjectProperty()
+    off_hand_name = kp.StringProperty(" - ")
     main_hand = kp.ObjectProperty()
     main_hand_name = kp.StringProperty(" - ")
     armor = kp.ObjectProperty()
     armor_name = kp.StringProperty(" - ")
     equiped = {
-        "second_hand": " - ",
+        "off_hand": " - ",
         "main_hand": " - ",
         "armor": " - "
     }
@@ -151,17 +152,25 @@ class Player(EventDispatcher):
             print("previous", previous)
             self.items_in_use_names.remove(previous)
             self.items_availables_names.append(previous)
+            self.equiped[side_name] = " - "
         else:
             self.equiped[side_name] = new_equipment_name
             self.items_in_use_names.append(new_equipment_name)
             self.items_availables_names.remove(new_equipment_name)
-        
-
-
 
         print("equiped: %s, items_in_use: %s, self.items_availables_names: %s" % \
             (self.equiped, self.items_in_use_names, self.items_availables_names))
+        self.update_atk()
         spinner.selected = False
+
+    def update_atk(self):
+        print("update_atk")
+        if self.equiped["main_hand"] == " - ":
+            equiped = "unarmed_strike"
+        else:
+            equiped = self.equiped["main_hand"]
+        main_hand = getattr(self.app, equiped)
+        self.atk = main_hand.damage
 
 
 class OverView(Screen):

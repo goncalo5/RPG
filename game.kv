@@ -90,6 +90,11 @@
                 text: "%s" % app.player.hp
         BoxVertical:
             Label:
+                text: "atk:"
+            Label:
+                text: "%s" % app.player.atk
+        BoxVertical:
+            Label:
                 text: "speed:"
             Label:
                 text: "%s" % app.player.speed
@@ -101,13 +106,13 @@
         BoxHorizontal:
             BoxVertical:
                 Label:
-                    text: "second hand"
+                    text: "off hand"
                 Spinner:
                     selected: False
-                    text: app.player.equiped["second_hand"]
+                    text: app.player.equiped["off_hand"]
                     values: app.player.items_availables_names
                     on_text:
-                        app.player.change_equipment(self, self.text, "second_hand")
+                        app.player.change_equipment(self, self.text, "off_hand")
             BoxVertical:
                 Label:
                     text: "armor"
