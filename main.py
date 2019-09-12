@@ -72,7 +72,7 @@ class Player(EventDispatcher):
     carried = kp.NumericProperty()
     # combat:
     hp = kp.NumericProperty(INIT.get("hp"))
-    atk = kp.StringProperty()
+    atk = kp.StringProperty("1")
     # items:
     items = kp.ListProperty()
     items_names = kp.ListProperty()
