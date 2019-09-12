@@ -2546,6 +2546,9 @@ WARRIOR = {
 }
 
 # MONSTERS = {"wolf": wolf, "bear": bear, "snake": snake}
+ENEMIES = {
+    "warrior": WARRIOR
+}
 
 ORDER_OF_CARACTERISTICS_TO_PRINT = ["hp", "armor", "init", "speed"]
 
@@ -2589,9 +2592,9 @@ desert = {
 village = {
     "name": "Village",
     "options": ["house", "market", "smith"],
-    "enemies": {
-        "warrior": WARRIOR
-    }
+    "enemies": [
+        "warrior"
+    ]
 }
 mine = {
 

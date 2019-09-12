@@ -1,5 +1,6 @@
 # python:
 import random
+import re
 # kivy:
 from kivy.app import App
 from kivy import properties as kp
@@ -8,7 +9,7 @@ from kivy.clock import Clock
 # kivy - uix:
 from kivy.uix.screenmanager import ScreenManager, Screen
 # mine:
-from settings import COINS, INIT, ITEMS, WEAPONS, PLACES, human
+from settings import COINS, INIT, ITEMS, WEAPONS, PLACES, human, ENEMIES
 
 
 def convert_to_gold(coins):
@@ -22,14 +23,33 @@ def convert_to_gold(coins):
         return copper / 100
 
 
-def convert_dices2value(dices):
-    # print("convert_dices2value", dices)
+def convert_1_set_dices2value(dices):
+    # print("convert_1_set_dices2value", dices)
+    if "d" not in dices:
+        return dices
     n, dice = dices.split("d")
     # print(n, dice)
     value = int(n) * random.randint(1, int(dice))
     # print(value)
     return value
 
+def convert_dices2value(dices):
+    # print("convert_dices2value", dices)
+    # pattern = re.compile("([0-9d]+[+-]?)")
+    pattern = re.compile("([0-9d]+)([+-])?")
+    matches = pattern.findall(dices)
+    # print(matches)
+    to_eval = ""
+    for dices, operation in matches:
+        # print(dices, operation)
+        one_set = convert_1_set_dices2value(dices)
+        # print("one_set", one_set)
+        to_eval += str(one_set)
+        to_eval += operation
+    # print("to_eval", to_eval)
+    return eval(to_eval)
+
+# print(convert_dices2value("2d6+4"))
 
 class Item(EventDispatcher):
     damage = kp.StringProperty("")
@@ -58,6 +78,15 @@ class Place(EventDispatcher):
         super().__init__()
         self.settings = PLACES.get(name)
         self.name = self.settings.get("name", "")
+
+
+class Enemy(EventDispatcher):
+    def __init__(self, name, settings):
+        self.name = name
+        self.settings = settings
+        self.hp = convert_dices2value(settings.get("hp"))
+
+
 
 
 class Player(EventDispatcher):
@@ -218,6 +247,10 @@ class GameApp(App):
         # Places:
         for place_name in PLACES:
             setattr(self, place_name, Place(place_name))
+
+        # Enemies:
+        for enemy_name, enemy_settings in ENEMIES.items():
+            setattr(self, enemy_name, Enemy(enemy_name, enemy_settings))
 
 
 
